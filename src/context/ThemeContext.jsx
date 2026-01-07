@@ -8,9 +8,10 @@ export { THEMES as themes };
 export function ThemeProvider({ children }) {
     const [theme, setTheme] = useState(() => {
         // Randomize theme for new users
-        const saved = localStorage.getItem("google-club-theme");
-        if (saved) return saved;
+        // const saved = localStorage.getItem("google-club-theme");
+        // if (saved) return saved;
 
+        // Randomize theme on EVERY reload (ignoring saved preference)
         const allThemes = Object.values(THEMES);
         return allThemes[Math.floor(Math.random() * allThemes.length)];
     });
