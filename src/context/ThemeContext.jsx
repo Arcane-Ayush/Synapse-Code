@@ -20,7 +20,6 @@ export function ThemeProvider({ children }) {
         // Remove all previous theme attributes
         document.documentElement.removeAttribute("data-theme");
 
-        // Apply new theme
         document.documentElement.setAttribute("data-theme", theme);
         localStorage.setItem("google-club-theme", theme);
     }, [theme]);
