@@ -7,7 +7,12 @@ export { THEMES as themes };
 
 export function ThemeProvider({ children }) {
     const [theme, setTheme] = useState(() => {
-        return localStorage.getItem("google-club-theme") || THEMES.BASIC;
+        // Randomize theme for new users
+        const saved = localStorage.getItem("google-club-theme");
+        if (saved) return saved;
+
+        const allThemes = Object.values(THEMES);
+        return allThemes[Math.floor(Math.random() * allThemes.length)];
     });
 
     useEffect(() => {

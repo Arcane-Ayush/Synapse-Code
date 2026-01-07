@@ -1,7 +1,7 @@
 import { useRef, useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ExternalLink, Github } from 'lucide-react';
-import { Button } from './Button';
+
 
 export function ConstellationTimeline({ projects }) {
     const [activeId, setActiveId] = useState(null);

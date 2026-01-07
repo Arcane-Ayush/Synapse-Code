@@ -62,7 +62,7 @@ export function Home() {
                                 Future
                             </span>
                             <br />
-                            With Us.
+                            Together.
                         </motion.h1>
 
                         <motion.p variants={itemVariants} className="text-xl md:text-2xl text-muted-foreground max-w-xl mx-auto md:mx-0 font-light leading-relaxed">
