@@ -79,26 +79,26 @@ export const projects = [
         demoUrl: "",
         githubUrl: "https://github.com/Arcane-Ayush"
     },
-    {
-        id: 9,
-        title: "Campus Navigator",
-        team: "Team Dawn",
-        description: "AR-powered campus navigation app that helps new students find their way around.",
-        tags: ["React Native", "ARKit", "Maps"],
-        image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1000",
-        demoUrl: "",
-        githubUrl: "https://github.com/Arcane-Ayush"
-    },
-    {
-        id: 10,
-        title: "Study Group Finder",
-        team: "Team Eve",
-        description: "Platform that matches students based on courses and study preferences for group formation.",
-        tags: ["Vue.js", "GraphQL", "PostgreSQL"],
-        image: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=1000",
-        demoUrl: "",
-        githubUrl: "https://github.com/Arcane-Ayush"
-    }
+    // {
+    //     id: 9,
+    //     title: "Campus Navigator",
+    //     team: "Team Dawn",
+    //     description: "AR-powered campus navigation app that helps new students find their way around.",
+    //     tags: ["React Native", "ARKit", "Maps"],
+    //     image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1000",
+    //     demoUrl: "",
+    //     githubUrl: "https://github.com/Arcane-Ayush"
+    // },
+    // {
+    //     id: 10,
+    //     title: "Study Group Finder",
+    //     team: "Team Eve",
+    //     description: "Platform that matches students based on courses and study preferences for group formation.",
+    //     tags: ["Vue.js", "GraphQL", "PostgreSQL"],
+    //     image: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=1000",
+    //     demoUrl: "",
+    //     githubUrl: "https://github.com/Arcane-Ayush"
+    // }
 ];
 
 export const activities = [

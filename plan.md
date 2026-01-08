@@ -16,4 +16,14 @@ Rest make a separate file for the implementations of JS and another file for the
 * Editing the button behavior of planned activities
 * Editing the activities and projects 
 * Refactoring activites.jsx
+* make one for phone 
+* Change the accordion from horizontal to vertical 
 
+
+## Commits plan 
+
+    -- Time caclculation is added
+    -- Make a commit after activities is refactored 
+    -- disabling the accept Quest or the buttons for that with activities that are planned
+    -- mockData is made a gist and being fetched
+    -- quality of life changes in the constellation timeline ( like waveform -- and so on.) "Follow the signal"

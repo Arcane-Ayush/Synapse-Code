@@ -3,6 +3,19 @@ import { useTheme, themes } from "../context/ThemeContext";
 import { motion } from "framer-motion";
 import { Calendar, MapPin, Clock, QrCode, Ticket, ScanLine, Tag, Gamepad2, Sparkles } from "lucide-react";
 
+// Helper to format ISO date to "MMM DD, YYYY"
+const formatDate = (isoDate) => {
+    try {
+        return new Date(isoDate).toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric'
+        });
+    } catch (e) {
+        return isoDate;
+    }
+};
+
 // --- SPACE THEME: Holographic Boarding Pass ---
 function SpaceActivityPass({ activity, index }) {
     const isCompleted = activity.status === "Completed";
@@ -50,7 +63,7 @@ function SpaceActivityPass({ activity, index }) {
                 <div className={`grid grid-cols-2 gap-4 text-sm font-mono mb-6 ${isCompleted ? "text-slate-600" : "text-cyan-300/80"}`}>
                     <div className="flex items-center gap-2">
                         <Calendar size={14} className={isCompleted ? "text-slate-600" : "text-cyan-500"} />
-                        <span>DATE: {activity.date}</span>
+                        <span>DATE: {formatDate(activity.date)}</span>
                     </div>
                     <div className="flex items-center gap-2">
                         <Clock size={14} className={isCompleted ? "text-slate-600" : "text-cyan-500"} />
@@ -90,6 +103,10 @@ function SpaceActivityPass({ activity, index }) {
                     {isCompleted ? (
                         <button disabled className="w-full flex items-center justify-center gap-2 bg-slate-800 border border-slate-700 text-slate-500 text-xs font-bold uppercase py-2 px-4 rounded cursor-not-allowed">
                             <Ticket size={14} /> EXPIRED
+                        </button>
+                    ) : activity.status === "Planned" ? (
+                        <button disabled className="w-full flex items-center justify-center gap-2 bg-cyan-950/30 border border-cyan-500/10 text-cyan-500/50 text-xs font-bold uppercase py-2 px-4 rounded cursor-not-allowed">
+                            <Ticket size={14} /> TBA_SOON
                         </button>
                     ) : (
                         <a href={activity.link || "#"} target="_blank" rel="noopener noreferrer" className="block w-full">
@@ -148,7 +165,7 @@ function ArcadeActivityCard({ activity, index }) {
                 </h3>
 
                 <div className={`flex flex-wrap gap-4 text-sm mb-6 font-bold ${isCompleted ? "text-slate-600" : "text-cyan-300"}`}>
-                    <span className="bg-slate-800/50 px-2 py-1">📅 {activity.date}</span>
+                    <span className="bg-slate-800/50 px-2 py-1">📅 {formatDate(activity.date)}</span>
                     <span className="bg-slate-800/50 px-2 py-1">⏰ {activity.time}</span>
                 </div>
 
@@ -173,6 +190,10 @@ function ArcadeActivityCard({ activity, index }) {
                 {isCompleted ? (
                     <button disabled className="w-full h-full border-2 border-slate-600 text-slate-600 font-black uppercase text-xl cursor-not-allowed">
                         DONE
+                    </button>
+                ) : activity.status === "Planned" ? (
+                    <button disabled className="w-full h-full border-2 border-slate-700 text-slate-500 font-black uppercase text-xl cursor-not-allowed opacity-50">
+                        LOCKED
                     </button>
                 ) : (
                     <a href={activity.link || "#"} target="_blank" rel="noopener noreferrer" className="w-full h-full block">
@@ -233,7 +254,7 @@ function AnimeActivityCard({ activity, index }) {
 
                 <div className={`flex flex-wrap gap-x-8 gap-y-2 text-sm font-bold ${isCompleted ? "text-slate-400" : "text-slate-500"}`}>
                     <div className="flex items-center gap-2">
-                        <Calendar size={16} className={isCompleted ? "text-slate-400" : "text-pink-400"} /> {activity.date}
+                        <Calendar size={16} className={isCompleted ? "text-slate-400" : "text-pink-400"} /> {formatDate(activity.date)}
                     </div>
                 </div>
             </div>
@@ -243,6 +264,10 @@ function AnimeActivityCard({ activity, index }) {
                 {isCompleted ? (
                     <button disabled className="bg-slate-300 text-slate-500 font-bold py-3 px-8 rounded-lg cursor-not-allowed">
                         Completed
+                    </button>
+                ) : activity.status === "Planned" ? (
+                    <button disabled className="bg-slate-100 text-slate-400 font-bold py-3 px-8 rounded-lg cursor-not-allowed">
+                        Coming Soon
                     </button>
                 ) : (
                     <a href={activity.link || "#"} target="_blank" rel="noopener noreferrer">
@@ -259,25 +284,54 @@ function AnimeActivityCard({ activity, index }) {
 export function Activities() {
     const { theme } = useTheme();
 
-    // Sort: Active/Upcoming first, Completed last
-    const sortedActivities = [...activities].sort((a, b) => {
-        if (a.status === "Completed" && b.status !== "Completed") return 1;
-        if (a.status !== "Completed" && b.status === "Completed") return -1;
-        return 0;
+    // Auto-update status based on date
+    const processedActivities = activities.map(activity => {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // Normalize today to midnight
+        const activityDate = new Date(activity.date);
+
+        // If date has passed, force status to Completed
+        if (activityDate < today) {
+            return { ...activity, status: "Completed" };
+        }
+        return activity;
+    });
+
+    // Sort: Active/Upcoming first (sorted by date asc), Completed last (sorted by date desc)
+    const sortedActivities = [...processedActivities].sort((a, b) => {
+        // First priority: Status (Completed goes to bottom)
+        //didn't know we could do like this
+        const isACompleted = a.status === "Completed";
+        const isBCompleted = b.status === "Completed";
+
+        if (isACompleted && !isBCompleted) return 1;
+        if (!isACompleted && isBCompleted) return -1;
+
+        // Now Dates-
+        // If both are completed, show most recent first (Desc)
+        // If both are upcoming, show soonest first (Asc)
+        const dateA = new Date(a.date);
+        const dateB = new Date(b.date);
+
+        if (isACompleted && isBCompleted) {
+            return dateB - dateA;
+        } else {
+            return dateA - dateB;
+        }
     });
 
     return (
         <div className="container mx-auto px-4 py-12">
             <div className="text-center mb-16">
                 <h2 className={`text-5xl md:text-6xl font-black mb-4 ${theme === themes.ANIME ? "text-slate-800 drop-shadow-sm font-serif italic" :
-                        theme === themes.ARCADE ? "text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-yellow-500 uppercase tracking-tighter" :
-                            "text-transparent bg-clip-text bg-gradient-to-b from-cyan-300 to-blue-500"
+                    theme === themes.ARCADE ? "text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-yellow-500 uppercase tracking-tighter" :
+                        "text-transparent bg-clip-text bg-gradient-to-b from-cyan-300 to-blue-500"
                     }`}>
                     {theme === themes.ANIME ? "Notice Board" : theme === themes.ARCADE ? "HIGH SCORES" : "MISSION_LOG"}
                 </h2>
                 <p className={`max-w-2xl mx-auto text-lg ${theme === themes.ANIME ? "text-slate-500 font-serif italic" :
-                        theme === themes.ARCADE ? "text-pink-400 font-mono" :
-                            "text-cyan-400/60"
+                    theme === themes.ARCADE ? "text-pink-400 font-mono" :
+                        "text-cyan-400/60"
                     }`}>
                     {theme === themes.ANIME ? "Choose your quest, adventurer!" :
                         theme === themes.ARCADE ? "SELECT LEVEL TO START" :
