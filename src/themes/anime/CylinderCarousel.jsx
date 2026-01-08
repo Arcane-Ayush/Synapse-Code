@@ -4,18 +4,25 @@ import { ProjectCard } from "../../components/ProjectCard";
 
 export function CylinderCarousel({ projects }) {
     const count = projects.length;
-    const cardWidth = 300;
-    const cardHeight = 400;
-    const gap = 40;
+    // Responsive Dimensions
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+    useEffect(() => {
+        const handleResize = () => setIsMobile(window.innerWidth < 768);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    const cardWidth = isMobile ? 240 : 300;
+    const cardHeight = isMobile ? 320 : 400;
+    const gap = isMobile ? 20 : 40;
     const thickness = 16;
 
     // Dynamic Radius & Z-Adjustment
     let radius = Math.round((cardWidth + gap) / (2 * Math.tan(Math.PI / count)));
-    radius = Math.max(radius, 320);
+    radius = Math.max(radius, isMobile ? 200 : 320); // Allow tighter radius on mobile
 
-    // Calculate how much we need to push the cylinder BACK so the front card stays 
-    // at a consistent "sweet spot" distance from the camera.
-    // Assuming optimal viewing distance for a card is when it's at Z ~ +350-400 relative to center of view (perspective 1500)
+    // Assuming viewing distance for a card is when it's at Z ~ +350-400 relative to center of view (perspective 1500)
     // If center is 0, front card is at +radius.
     // We want (+radius) + (cylinderOffset) = 400
     // => cylinderOffset = 400 - radius
@@ -31,33 +38,99 @@ export function CylinderCarousel({ projects }) {
     const isSnappingRef = useRef(false);
     const targetRotationRef = useRef(0);
 
+    // Drag/Swipe Refs
+    const isDraggingRef = useRef(false);
+    const lastXRef = useRef(0);
+    const lastTimeRef = useRef(0);
+
     useEffect(() => {
         let animationFrameId;
         const animate = () => {
-            if (isSnappingRef.current) {
+            if (isDraggingRef.current) {
+                // While dragging, rotation is handled by move events
+                // We just update lastTime to calculate velocity on release
+                lastTimeRef.current = Date.now();
+            } else if (isSnappingRef.current) {
                 const diff = targetRotationRef.current - rotationRef.current;
                 if (Math.abs(diff) < 0.5) {
                     rotationRef.current = targetRotationRef.current;
                     isSnappingRef.current = false;
-                    speedRef.current = 0;
+                    speedRef.current = 0.2; // Resume auto-spin
                 } else {
                     rotationRef.current += diff * 0.1;
                 }
             } else {
-                const targetSpeed = isHovered ? 0 : 0.2;
-                speedRef.current += (targetSpeed - speedRef.current) * 0.05;
+                // Momentum & Auto-Rotation
+                // If speed is high (from a flick), decay it.
+                // If speed is low, drift back to 0.2 (auto-spin).
+                const targetSpeed = 0.2;
+
+                // Friction
+                if (Math.abs(speedRef.current) > 0.25) {
+                    speedRef.current *= 0.95;
+                } else {
+                    // Smoothly return to cruising speed
+                    speedRef.current += (targetSpeed - speedRef.current) * 0.05;
+                }
                 rotationRef.current += speedRef.current;
             }
+
             if (containerRef.current) {
                 containerRef.current.style.transform = `rotateY(${rotationRef.current}deg)`;
             }
             animationFrameId = requestAnimationFrame(animate);
         };
         animate();
-        return () => {
-            cancelAnimationFrame(animationFrameId);
-        };
-    }, [isHovered]);
+        return () => cancelAnimationFrame(animationFrameId);
+    }, [isHovered]); // Keeping isHovered dep if needed, though dragging overrides it
+
+    // --- Pointer Events (Mouse + Touch) ---
+    const handlePointerDown = (e) => {
+        isDraggingRef.current = true;
+        isSnappingRef.current = false;
+        // Unite Mouse/Touch X
+        const x = e.clientX || (e.touches && e.touches[0].clientX);
+        lastXRef.current = x;
+        speedRef.current = 0; // Stop auto-spin immediately
+    };
+
+    const handlePointerMove = (e) => {
+        if (!isDraggingRef.current) return;
+
+        // Prevent default scroll on touch (if mostly horizontal)
+        // e.preventDefault(); // Don't do this rigidly or page can't scroll vertical
+
+        const x = e.clientX || (e.touches && e.touches[0].clientX);
+        const delta = x - lastXRef.current;
+        lastXRef.current = x;
+
+        // Apply rotation directly (Reversed for Natural feel)
+        // Sensitivity: 0.5 deg per pixel
+        rotationRef.current += delta * 0.5;
+
+        // Store velocity for momentum throw
+        speedRef.current = delta * 0.5;
+    };
+
+    const handlePointerUp = () => {
+        isDraggingRef.current = false;
+        // speedRef.current tracks the last delta, so momentum initiates automatically in animate()
+    };
+
+    // --- Trackpad / Wheel Support ---
+    const handleWheel = (e) => {
+        // If user is scrolling horizontally (trackpad swipe)
+        if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+            e.preventDefault(); // Lock vertical scroll while swiping sideways
+
+            // Apply rotation based on scroll delta
+            const scrollDelta = e.deltaX * 0.5;
+
+            rotationRef.current -= scrollDelta; // Natural scroll direction
+            speedRef.current = -scrollDelta * 0.1; // Small momentum
+            isSnappingRef.current = false; // Cancel any snap
+        }
+    };
 
     const handleDoubleClick = (index) => {
         const cardAngle = index * angleStep;
@@ -77,7 +150,7 @@ export function CylinderCarousel({ projects }) {
     };
 
     const layers = [];
-    const layersCount = 3; // Reduced from 8 to eliminate flickering
+    const layersCount = 3;
     const step = thickness / (layersCount + 1);
     for (let i = 1; i <= layersCount; i++) {
         layers.push((thickness / 2) - (i * step));
@@ -85,18 +158,21 @@ export function CylinderCarousel({ projects }) {
 
     return (
         <div
-            className="relative w-full h-full flex items-center justify-center"
-            style={{
-                perspective: "1500px",
-                // Apply the compensation here. The wrapper moves back, the cylinder spins inside.
-                // But wait, if we move THIS div, we move the perspective origin.
-                // We should move the INNER div (containerRef parent?) 
-            }}
+            className="relative w-full h-full flex items-center justify-center touch-pan-y"
+            style={{ perspective: "1500px" }}
+            onMouseDown={handlePointerDown}
+            onMouseMove={handlePointerMove}
+            onMouseUp={handlePointerUp}
+            onMouseLeave={handlePointerUp}
+            onTouchStart={handlePointerDown}
+            onTouchMove={handlePointerMove}
+            onTouchEnd={handlePointerUp}
+            onWheel={handleWheel}
         >
-            {/* Left Button */}
+            {/* Left Button (Hidden on Mobile) */}
             <button
-                onClick={() => handleNavigation(-1)}
-                className="absolute left-[-50px] md:left-4 z-50 p-3 rounded-full bg-white/20 hover:bg-white/40 backdrop-blur-md border border-white/30 transition-all text-gray-800 shadow-lg hover:scale-110"
+                onClick={(e) => { e.stopPropagation(); handleNavigation(-1); }}
+                className="hidden md:block absolute left-4 z-50 p-3 rounded-full bg-white/20 hover:bg-white/40 backdrop-blur-md border border-white/30 transition-all text-gray-800 shadow-lg hover:scale-110"
                 aria-label="Previous Project"
             >
                 <ChevronLeft className="w-8 h-8" />
@@ -107,7 +183,7 @@ export function CylinderCarousel({ projects }) {
                This wrapper stays still (rotation-wise) but moves in Z.
             */}
             <div
-                className="relative preserve-3d transition-transform duration-1000 ease-out"
+                className="relative preserve-3d transition-transform duration-1000 ease-out pointer-events-none"
                 style={{
                     transform: `translateZ(${cylinderOffsetZ}px)`,
                     transformStyle: "preserve-3d"
@@ -115,10 +191,10 @@ export function CylinderCarousel({ projects }) {
             >
                 <div
                     ref={containerRef}
-                    className="relative w-[300px] h-full preserve-3d flex items-center justify-center"
+                    className="relative w-[300px] h-full preserve-3d flex items-center justify-center transition-transform duration-300 pointer-events-auto"
                     style={{
                         transformStyle: "preserve-3d",
-                        cursor: isHovered ? 'grab' : 'default'
+                        cursor: isDraggingRef.current ? 'grabbing' : 'grab'
                     }}
                     onMouseEnter={() => setIsHovered(true)}
                     onMouseLeave={() => setIsHovered(false)}
@@ -139,6 +215,8 @@ export function CylinderCarousel({ projects }) {
                                     e.stopPropagation();
                                     handleDoubleClick(index);
                                 }}
+                                // Prevent drag from getting swallowed by children
+                                onDragStart={(e) => e.preventDefault()}
                             >
                                 {layers.map((zOffset, i) => (
                                     <div
@@ -150,7 +228,7 @@ export function CylinderCarousel({ projects }) {
                                             backgroundColor: 'rgba(255, 255, 255, 0.4)',
                                             borderColor: 'rgba(0,0,0,0.1)',
                                             // backdropFilter: 'blur(8px)'
-                                            // backdrop-filter removed for performance
+                                            // backdrop-filter removed for performance/optimization
                                         }}
                                     />
                                 ))}
@@ -188,10 +266,10 @@ export function CylinderCarousel({ projects }) {
                 </div>
             </div>
 
-            {/* Right Button */}
+            {/* Right Button (Hidden on Mobile) */}
             <button
-                onClick={() => handleNavigation(1)}
-                className="absolute right-[-50px] md:right-4 z-50 p-3 rounded-full bg-white/20 hover:bg-white/40 backdrop-blur-md border border-white/30 transition-all text-gray-800 shadow-lg hover:scale-110"
+                onClick={(e) => { e.stopPropagation(); handleNavigation(1); }}
+                className="hidden md:block absolute right-4 z-50 p-3 rounded-full bg-white/20 hover:bg-white/40 backdrop-blur-md border border-white/30 transition-all text-gray-800 shadow-lg hover:scale-110"
                 aria-label="Next Project"
             >
                 <ChevronRight className="w-8 h-8" />

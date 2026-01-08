@@ -38,7 +38,7 @@ export function Sprints() {
                     {/* Arcade Leaderboard */}
                     <div className="max-w-4xl mx-auto border-4 border-double border-purple-500/50 p-6 bg-black/90 relative shadow-[0_0_30px_rgba(168,85,247,0.2)]">
                         <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-black px-6 py-1 text-purple-400 font-bold tracking-widest border border-purple-500 shadow-[0_0_10px_rgba(168,85,247,0.4)]">
-                            TOP PLAYERS
+                            TOP TEAMS
                         </div>
                         <div className="space-y-3 font-mono mt-2">
                             {sortedLeaderboard.map((team, index) => (

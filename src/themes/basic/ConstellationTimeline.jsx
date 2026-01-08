@@ -1,4 +1,4 @@
-import { useRef, useState, useMemo } from 'react';
+import { useRef, useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ExternalLink, Github } from 'lucide-react';
 
@@ -11,21 +11,31 @@ export function ConstellationTimeline({ projects }) {
     const ITEM_HEIGHT = 250; // Increased spacing to reduce overlap
     const TOTAL_HEIGHT = projects.length * ITEM_HEIGHT + 400; // Extra padding
 
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+    useEffect(() => {
+        const handleResize = () => setIsMobile(window.innerWidth < 768);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
     // Calculate positions for Vertical Constellation
     const points = useMemo(() => {
         return projects.map((_, index) => {
             // Organic "Star Map" Layout
-            // Start Left (25%) and wander naturally
-            // Using Cosine to start at extrema (-1), scaled to 25% offset
-            // Factor 0.7 adds a gentle curve, not a frantic zigzag
-            const x = 50 - Math.cos(index * 0.7) * 25;
+            // Mobile: Tighter sway (10%) to keep cards on screen
+            // Desktop: Wide sway (25%) for immersive feel
+            const amplitude = isMobile ? 10 : 25;
+
+            // Using Cosine to start at extrema, scaled to amplitude
+            const x = 50 - Math.cos(index * 0.7) * amplitude;
 
             // Y: Linear progression
             const y = 200 + (index * ITEM_HEIGHT);
 
             return { x, y, id: projects[index].id };
         });
-    }, [projects]);
+    }, [projects, isMobile]);
 
     return (
         <div
@@ -73,9 +83,12 @@ export function ConstellationTimeline({ projects }) {
                     return (
                         <div
                             key={project.id}
-                            className="absolute"
+                            className="absolute transition-all duration-500"
                             style={{
-                                left: `${point.x}%`,
+                                left: `${point.x}%`, // Note: On mobile we might want to override this to 50% via CSS class if possible, but valid dynamic style. 
+                                // Actually, let's keep the organic line on mobile too? 
+                                // With width 80vw centered below, it might be safer to force points to center on mobile?
+                                // I'll add a 'md:left-[...]' class logic? No, style overrides classes.
                                 top: `${point.y}px`,
                                 transform: 'translate(-50%, -50%)',
                                 zIndex: isActive ? 100 : 10 // Fix Overlapping: Hovered item pops to top
@@ -101,11 +114,16 @@ export function ConstellationTimeline({ projects }) {
                             {/* Project Information Card */}
                             <div
                                 className={`
-                                    absolute top-1/2 -translate-y-1/2 
-                                    ${isLeft ? 'right-full mr-6' : 'left-full ml-6'}
-                                    w-[280px] md:w-[350px]
+                                    absolute 
+                                    /* Mobile: Center below the dot */
+                                    top-8 left-1/2 -translate-x-1/2
+                                    /* Desktop: Side positioning */
+                                    md:top-1/2 md:-translate-y-1/2 md:translate-x-0
+                                    ${isLeft ? 'md:right-full md:mr-6 md:left-auto' : 'md:left-full md:ml-6'}
+                                    
+                                    w-[80vw] max-w-[280px] md:w-[350px] md:max-w-none
                                     transition-all duration-500 ease-out
-                                    ${isActive ? 'scale-105 opacity-100' : 'scale-95 opacity-60 hover:opacity-100'}
+                                    ${isActive ? 'scale-105 opacity-100 z-50' : 'scale-95 opacity-60 hover:opacity-100'}
                                 `}
                             >
                                 <div className={`
@@ -113,9 +131,9 @@ export function ConstellationTimeline({ projects }) {
                                     ${isActive ? 'border-cyan-500/50 shadow-[0_0_30px_rgba(0,255,255,0.1)]' : 'border-white/10'}
                                     rounded-lg overflow-hidden p-0 group
                                 `}>
-                                    {/* Connector Line (Node to Card) - Thin white trace */}
+                                    {/* Mobile: Hidden (card floats below) or Vertical? Let's hide on mobile to simplify */}
                                     <div className={`
-                                        absolute top-1/2 w-6 h-[1px] bg-white/20
+                                        hidden md:block absolute top-1/2 w-6 h-[1px] bg-white/20
                                         ${isLeft ? '-right-6' : '-left-6'}
                                     `} />
 

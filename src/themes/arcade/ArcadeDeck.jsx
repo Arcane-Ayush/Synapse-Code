@@ -25,7 +25,7 @@ export function ArcadeDeck({ projects }) {
 
     return (
         <div
-            className="relative w-full max-w-6xl h-[450px] flex items-center px-4"
+            className="relative w-full max-w-6xl h-[800px] md:h-[450px] flex items-center px-4 md:px-4 py-12 md:py-0"
             style={{
                 backgroundImage: "linear-gradient(#000, #000), linear-gradient(90deg, #00ff00, #ff00ff)",
                 backgroundOrigin: "border-box",
@@ -34,25 +34,27 @@ export function ArcadeDeck({ projects }) {
                 boxShadow: "0 0 15px rgba(200, 0, 255, 0.4)"
             }}
         >
-            {/* Previous Button - Full Height Strip */}
+            {/* Previous Button - Adaptive */}
             <button
                 onClick={prevPage}
                 disabled={page === 0}
                 className={`
-                    absolute left-0 top-0 bottom-0 z-20 w-12
+                    absolute z-20 
+                    md:left-0 md:top-0 md:bottom-0 md:w-12 md:h-full md:border-r
+                    left-0 right-0 top-0 h-10 w-full border-b
                     flex items-center justify-center
-                    bg-black/60 border-r border-[#df00ff]/30
+                    bg-black/60 border-[#df00ff]/30
                     text-[#df00ff] 
                     hover:bg-[#df00ff]/10 hover:border-[#df00ff] hover:text-[#df00ff]
                     transition-all duration-300 disabled:opacity-0 disabled:pointer-events-none
                     opacity-50 hover:opacity-100 group/btn
                 `}
             >
-                <ChevronLeft className="w-8 h-8 group-hover/btn:scale-125 transition-transform" />
+                <ChevronLeft className="w-6 h-6 md:w-8 md:h-8 group-hover/btn:scale-125 transition-transform rotate-90 md:rotate-0" />
             </button>
 
             {/* Deck Area */}
-            <div className="flex-1 h-full flex gap-2 overflow-hidden px-14 py-4">
+            <div className="flex-1 w-full h-full flex flex-col md:flex-row gap-2 overflow-hidden px-2 md:px-14 py-2 md:py-4">
                 {currentProjects.map((project, index) => {
                     const isActive = index === activeIndex;
                     const displayTitle = project.title || "UNTITLED_PROJECT";
@@ -69,14 +71,18 @@ export function ArcadeDeck({ projects }) {
                             onClick={() => setActiveIndex(index)}
                             onMouseEnter={() => setActiveIndex(index)}
                         >
-                            {/* Vertical "Spine" (Inactive) */}
+                            {/* Vertical/Horizontal "Spine" (Inactive) */}
                             <div className={`
                                 absolute inset-0 flex items-center justify-center 
                                 transition-opacity duration-300 delay-100
                                 ${isActive ? 'opacity-0 pointer-events-none' : 'opacity-100'}
                             `}>
-                                <div className="writing-vertical-rl text-lg font-mono tracking-widest text-neutral-500 uppercase group-hover:text-[#ff00ff] transition-colors">
+                                <div className="hidden md:block writing-vertical-rl text-lg font-mono tracking-widest text-neutral-500 uppercase group-hover:text-[#ff00ff] transition-colors">
                                     {displayTitle.slice(0, 15)}
+                                </div>
+                                {/* Mobile Spine (Horizontal Text) */}
+                                <div className="md:hidden text-sm font-mono tracking-widest text-neutral-500 uppercase group-hover:text-[#ff00ff] transition-colors rotate-0">
+                                    {displayTitle.slice(0, 20)}
                                 </div>
                             </div>
 
@@ -128,16 +134,18 @@ export function ArcadeDeck({ projects }) {
                 onClick={nextPage}
                 disabled={page === totalPages - 1}
                 className={`
-                    absolute right-0 top-0 bottom-0 z-20 w-12
+                    absolute z-20 
+                    md:right-0 md:top-0 md:bottom-0 md:w-12 md:h-full md:border-l
+                    left-0 right-0 bottom-8 h-10 w-full border-t
                     flex items-center justify-center
-                    bg-black/60 border-l border-[#df00ff]/30
+                    bg-black/60 border-[#df00ff]/30
                     text-[#df00ff] 
                     hover:bg-[#df00ff]/10 hover:border-[#df00ff] hover:text-[#df00ff]
                     transition-all duration-300 disabled:opacity-0 disabled:pointer-events-none
                     opacity-50 hover:opacity-100 group/btn
                 `}
             >
-                <ChevronRight className="w-8 h-8 group-hover/btn:scale-125 transition-transform" />
+                <ChevronRight className="w-6 h-6 md:w-8 md:h-8 group-hover/btn:scale-125 transition-transform rotate-90 md:rotate-0" />
             </button>
             {/* Footer Strip Extension */}
             <div

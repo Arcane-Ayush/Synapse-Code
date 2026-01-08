@@ -55,7 +55,6 @@ export function ThemeEffects() {
         const handleMouseMove = (e) => {
             setMousePos({ x: e.clientX, y: e.clientY });
 
-            // Add point to trail
             const newPoint = {
                 x: e.clientX,
                 y: e.clientY,
@@ -95,6 +94,7 @@ export function ThemeEffects() {
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.5 }}
                         className="absolute rounded-full bg-pink-400"
+                        //CSS----
                         style={{
                             left: point.x,
                             top: point.y,

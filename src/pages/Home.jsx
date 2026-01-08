@@ -31,9 +31,8 @@ export function Home() {
 
     return (
         <div className="relative overflow-hidden w-full">
-            {/* Hero Section */}
-            {/* Centering Fix: Removed pt-16, applied min-h-[calc(100vh-4rem)] to account for navbar */}
-            <section className="relative min-h-[calc(100vh-4rem)] flex flex-col items-center justify-center px-4 overflow-hidden">
+            {/* Added pt-24 for mobile to clear navbar, removed min-h calc for mobile to avoid scroll issues if content is tall */}
+            <section className="relative min-h-screen md:min-h-[calc(100vh-4rem)] pt-28 md:pt-0 flex flex-col items-center justify-center px-4 overflow-hidden">
 
                 {/* Background Glows for visual interest without clutter */}
                 <div className="absolute top-[20%] left-[20%] w-96 h-96 bg-blue-500/20 rounded-full blur-[128px] pointer-events-none -z-10" />
@@ -97,7 +96,6 @@ export function Home() {
                         transition={{ duration: 1, delay: 0.2 }}
                         className="h-[500px] w-full flex items-center justify-center relative"
                     >
-                        {/* We put the 3D element here. The Hero3D component might need tweaks to fit well. */}
                         <div className="absolute inset-0 bg-gradient-to-tr from-transparent to-blue-500/5 rounded-full blur-3xl -z-10" />
                         <Hero3D />
                     </motion.div>
