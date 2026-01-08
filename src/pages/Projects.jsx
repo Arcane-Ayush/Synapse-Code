@@ -1,4 +1,5 @@
-import { projects } from "../data/mockData";
+// import { projects } from "../data/mockData"; // 🗑️ Deleted
+import { useData } from "../hooks/useData"; // 🆕 Hook
 import { ProjectCard } from "../components/ProjectCard";
 import { useTheme, themes } from "../context/ThemeContext";
 import { Button } from "../components/Button";
@@ -10,6 +11,7 @@ import { useState } from "react";
 
 export function Projects() {
     const { theme } = useTheme();
+    const { projects } = useData(); // 🎣 Hook
     const [showAll, setShowAll] = useState(false);
 
 

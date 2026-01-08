@@ -1,4 +1,5 @@
-import { activities } from "../data/mockData";
+// import { activities } from "../data/mockData"; // 🗑️ Deleted direct import
+import { useData } from "../hooks/useData"; // 🆕 Generated Hook
 import { useTheme, themes } from "../context/ThemeContext";
 import { SpaceActivityPass } from "../themes/basic/SpaceActivityPass";
 import { ArcadeActivityCard } from "../themes/arcade/ArcadeActivityCard";
@@ -6,6 +7,7 @@ import { AnimeActivityCard } from "../themes/anime/AnimeActivityCard";
 
 export function Activities() {
     const { theme } = useTheme();
+    const { activities } = useData(); // 🎣 Hook usage
 
     // Auto-update status based on date
     const processedActivities = activities.map(activity => {

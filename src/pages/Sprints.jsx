@@ -1,4 +1,5 @@
-import { leaderboard, currentSprint } from "../data/mockData";
+// import { leaderboard, currentSprint } from "../data/mockData"; // 🗑️ Deleted
+import { useData } from "../hooks/useData"; // 🆕 Hook
 import { useTheme, themes } from "../context/ThemeContext";
 import { SpaceTelemetry } from "../themes/basic/SpaceTelemetry";
 import { ArcadeKanban } from "../themes/arcade/ArcadeKanban";
@@ -7,6 +8,7 @@ import { AnimeQuestBoard } from "../themes/anime/AnimeQuestBoard";
 
 export function Sprints() {
     const { theme } = useTheme();
+    const { leaderboard, currentSprint } = useData(); // 🎣 Hook
 
     // specific sorting and ranking logic
     const sortedLeaderboard = [...leaderboard]
