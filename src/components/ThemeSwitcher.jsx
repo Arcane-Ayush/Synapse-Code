@@ -6,7 +6,7 @@ export function ThemeSwitcher() {
     const { theme, setTheme } = useTheme();
 
     return (
-        <div className="fixed bottom-6 right-6 z-50 flex gap-2 p-2 rounded-full bg-black/80 border border-white/20 backdrop-blur-xl shadow-2xl">
+        <div className="fixed bottom-6 right-6 z-50 flex gap-2 p-2 rounded-full bg-black/80 border border-white/20 backdrop-blur-xl shadow-2xl scale-75 md:scale-100 origin-bottom-right">
             {THEME_OPTIONS.map((option) => {
                 const Icon = option.icon;
                 const isActive = theme === option.id;
