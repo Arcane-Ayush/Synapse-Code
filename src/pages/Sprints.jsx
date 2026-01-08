@@ -8,6 +8,11 @@ import { AnimeQuestBoard } from "../themes/anime/AnimeQuestBoard";
 export function Sprints() {
     const { theme } = useTheme();
 
+    // specific sorting and ranking logic
+    const sortedLeaderboard = [...leaderboard]
+        .sort((a, b) => b.points - a.points)
+        .map((team, index) => ({ ...team, rank: index + 1 }));
+
     return (
         <div className="container mx-auto px-4 py-12">
 
@@ -34,7 +39,7 @@ export function Sprints() {
                             TOP PLAYERS
                         </div>
                         <div className="space-y-3 font-mono mt-2">
-                            {leaderboard.map((team, index) => (
+                            {sortedLeaderboard.map((team, index) => (
                                 <div key={team.name} className="flex items-center justify-between border-b border-purple-900/30 pb-2 hover:bg-purple-900/20 transition px-2 rounded">
                                     <div className="flex items-center gap-4">
                                         <span className={`text-xl font-bold ${index === 0 ? "text-yellow-400 drop-shadow-md" : "text-gray-500"}`}>
@@ -61,13 +66,13 @@ export function Sprints() {
                         <p className="text-slate-500 font-medium text-lg">Celebrate our top achievers!</p>
                     </div>
 
-                    <AnimePodium leaderboard={leaderboard} />
+                    <AnimePodium leaderboard={sortedLeaderboard} />
 
                     {/* Current Quest */}
                     <AnimeQuestBoard currentSprint={currentSprint} />
                 </div>
             ) : (
-                <SpaceTelemetry leaderboard={leaderboard} currentSprint={currentSprint} />
+                <SpaceTelemetry leaderboard={sortedLeaderboard} currentSprint={currentSprint} />
             )}
         </div>
     );

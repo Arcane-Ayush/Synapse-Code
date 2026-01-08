@@ -10,3 +10,10 @@
 
 Rest make a separate file for the implementations of JS and another file for the implementation of the animation like how you did it.
 
+
+### PENDING THINGS 
+
+* Editing the button behavior of planned activities
+* Editing the activities and projects 
+* Refactoring activites.jsx
+

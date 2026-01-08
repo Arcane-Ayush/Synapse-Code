@@ -79,6 +79,17 @@ export function SpaceTelemetry({ leaderboard, currentSprint }) {
                                         <span className="text-xs text-cyan-800">ID: {task.id}</span>
                                     </div>
                                     <h4 className="text-sm font-medium text-cyan-100">{task.title}</h4>
+                                    <div className="text-xs text-cyan-400 mt-1 uppercase tracking-wider font-semibold">
+                                        {task.assignedTo === "All" ? (
+                                            <span className="text-white font-bold animate-pulse">&gt;&gt; BROADCAST: FLEET WIDE &lt;&lt;</span>
+                                        ) : Array.isArray(task.assignedTo) ? (
+                                            <span className="text-orange-400 font-bold">MULTIPLE SIGNALS: {task.assignedTo.join(" + ")}</span>
+                                        ) : task.assignedTo ? (
+                                            `LOCKED ON: ${task.assignedTo}`
+                                        ) : (
+                                            <span className="text-cyan-400 animate-pulse opacity-70">&gt;&gt; UNCLAIMED SIGNAL &lt;&lt;</span>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                             <div className="text-right">

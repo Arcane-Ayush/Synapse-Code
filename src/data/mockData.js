@@ -105,7 +105,7 @@ export const activities = [
     {
         id: 1,
         title: "Intro to React Workshop",
-        date: "Feb 15, 2026",
+        date: "2026-02-15",
         time: "2:00 PM - 4:00 PM",
         location: "Lab 301",
         type: "Workshop",
@@ -117,7 +117,7 @@ export const activities = [
     {
         id: 2,
         title: "Google Cloud Study Jam",
-        date: "Feb 22, 2026",
+        date: "2026-02-22",
         time: "10:00 AM - 1:00 PM",
         location: "Auditorium",
         type: "Study Jam",
@@ -129,7 +129,7 @@ export const activities = [
     {
         id: 3,
         title: "Hackathon Kickoff",
-        date: "Mar 01, 2026",
+        date: "2026-03-01",
         time: "9:00 AM",
         location: "Main Hall",
         type: "Hackathon",
@@ -141,7 +141,7 @@ export const activities = [
     {
         id: 4,
         title: "AI/ML Speaker Session",
-        date: "Mar 10, 2026",
+        date: "2026-03-10",
         time: "3:00 PM - 4:30 PM",
         location: "Conference Room A",
         type: "Speaker Session",
@@ -153,7 +153,7 @@ export const activities = [
     {
         id: 5,
         title: "Open Source Day",
-        date: "Apr 05, 2026",
+        date: "2026-04-05",
         time: "11:00 AM - 5:00 PM",
         location: "Campus Hub",
         type: "Contribution",
@@ -165,7 +165,7 @@ export const activities = [
     {
         id: 6,
         title: "Winter Hackathon",
-        date: "Jan 10, 2026",
+        date: "2026-01-10",
         time: "9:00 AM - 9:00 PM",
         location: "Design Studio",
         type: "Hackathon",
@@ -177,19 +177,30 @@ export const activities = [
 ];
 
 export const leaderboard = [
-    { rank: 1, name: "Team Alpha", points: 1250, avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Alpha" },
-    { rank: 2, name: "Team Beta", points: 1100, avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Beta" },
-    { rank: 3, name: "Team Gamma", points: 950, avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Gamma" },
-    { rank: 4, name: "Team Delta", points: 900, avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Delta" },
-    { rank: 5, name: "Team Epsilon", points: 850, avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Epsilon" }
+    { name: "Team Alpha", points: 1250, avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Alpha" },
+    { name: "Team Beta", points: 1100, avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Beta" },
+    { name: "Team Gamma", points: 950, avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Gamma" },
+    { name: "Team Delta", points: 900, avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Delta" },
+    { name: "Team Epsilon", points: 850, avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Epsilon" }
 ];
 
 export const currentSprint = {
     title: "Sprint 4: AI & Machine Learning",
     deadline: "Jan 15, 2026",
     tasks: [
+        /* 
+           ASSIGNMENT MODES:
+           1. Single Team: "Team Alpha"
+           2. Open Bounty: null  (Available for anyone)
+           3. Co-op Mode: ["Team Alpha", "Team Beta"] (Multiple teams-- in an array)
+           4. Global Ops: "All" (Everyone is working on this)
+        */
         { id: 1, title: "Implement Neural Network", status: "Done", points: 100, assignedTo: "Team Alpha" },
         { id: 2, title: "Train Model on Dataset", status: "In Progress", points: 150, assignedTo: "Team Gamma" },
-        { id: 3, title: "Develop API Endpoint", status: "Todo", points: 120, assignedTo: "Team Beta" }
+        { id: 3, title: "Club-wide Hackathon", status: "In Progress", points: 1000, assignedTo: "All" },
+        { id: 4, title: "Develop API Endpoint", status: "Todo", points: 120, assignedTo: "Team Beta" },
+        { id: 5, title: "Design System Migration", status: "Todo", points: 200, assignedTo: null },
+        { id: 6, title: "Database Sharding", status: "In Progress", points: 300, assignedTo: ["Team Alpha", "Team Epsilon"] },
+        { id: 7, title: "Database Compiling", status: "Done", points: 200, assignedTo: ["Team Eta", "Team Epsilon"] },
     ]
 };

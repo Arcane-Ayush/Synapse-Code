@@ -49,7 +49,15 @@ export function ArcadeKanban({ tasks }) {
                                         </div>
                                         <h4 className="font-bold text-white text-lg mb-2 leading-tight tracking-wide">{task.title}</h4>
                                         <div className="flex justify-between items-center text-xs text-gray-400 border-t border-gray-800 pt-2 mt-2 font-mono">
-                                            <span className="text-gray-300">TARGET: {task.assignedTo}</span>
+                                            {task.assignedTo === "All" ? (
+                                                <span className="text-red-500 font-bold animate-pulse">⚠️ FACTION WAR</span>
+                                            ) : Array.isArray(task.assignedTo) ? (
+                                                <span className="text-yellow-400 font-bold">JOINT OP: {task.assignedTo.join(" / ")}</span>
+                                            ) : task.assignedTo ? (
+                                                <span className="text-gray-300">TARGET: {task.assignedTo}</span>
+                                            ) : (
+                                                <span className="text-green-400 font-bold animate-pulse">[ OPEN BOUNTY ]</span>
+                                            )}
                                             <span className="opacity-50">ID: #{task.id.toString().padStart(4, '0')}</span>
                                         </div>
                                     </motion.div>

@@ -66,7 +66,7 @@ export function Home() {
                         </motion.h1>
 
                         <motion.p variants={itemVariants} className="text-xl md:text-2xl text-muted-foreground max-w-xl mx-auto md:mx-0 font-light leading-relaxed">
-                            Google Club CU is the premier student community for developers, designers, and innovators.
+                            Google Club CU is a peer to peer student community for aspiring developers, designers, and innovators.
                         </motion.p>
 
                         <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start pt-4">
