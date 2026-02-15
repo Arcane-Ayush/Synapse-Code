@@ -1,14 +1,13 @@
 import { Link } from "react-router-dom";
 import { ArrowRight, Play, Pause, Users, MoreVertical, Clock } from "lucide-react";
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { cn } from "../utils/cn";
-import { useTheme, themes } from "../context/ThemeContext";
+import { useTheme } from "../context/ThemeContext";
+import { THEMES as themes } from "../themes/config";
 
 export function ProjectCard({ project, index, is3D = false }) {
     const { theme } = useTheme();
     const [isPlaying, setIsPlaying] = useState(false);
-    const videoRef = useRef(null);
-
     const handleMouseEnter = () => {
         if (project.demoUrl) {
             setIsPlaying(true);

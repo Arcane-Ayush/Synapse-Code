@@ -1,5 +1,5 @@
 import { Skull, Crosshair, Award } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion as Motion } from "framer-motion";
 
 export function ArcadeKanban({ tasks }) {
     const columns = [
@@ -37,7 +37,7 @@ export function ArcadeKanban({ tasks }) {
 
                             <div className="space-y-4">
                                 {colTasks.map((task) => (
-                                    <motion.div
+                                    <Motion.div
                                         key={task.id}
                                         whileHover={{ scale: 1.02, rotate: 1 }}
                                         className={`bg-black/90 border ${col.border} p-4 relative shadow-[0_0_20px_rgba(0,0,0,0.6)]`}
@@ -60,7 +60,7 @@ export function ArcadeKanban({ tasks }) {
                                             )}
                                             <span className="opacity-50">ID: #{task.id.toString().padStart(4, '0')}</span>
                                         </div>
-                                    </motion.div>
+                                    </Motion.div>
                                 ))}
                                 {colTasks.length === 0 && (
                                     <div className="text-center py-8 text-gray-600 font-bold italic opacity-50">
@@ -75,3 +75,4 @@ export function ArcadeKanban({ tasks }) {
         </div>
     );
 }
+export default ArcadeKanban;

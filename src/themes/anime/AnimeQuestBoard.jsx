@@ -1,5 +1,5 @@
 import { Trophy } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion as Motion } from "framer-motion";
 
 export function AnimeQuestBoard({ currentSprint }) {
     return (
@@ -14,7 +14,7 @@ export function AnimeQuestBoard({ currentSprint }) {
 
             <div className="flex flex-wrap justify-center gap-8">
                 {currentSprint.tasks.map((task, i) => (
-                    <motion.div
+                    <Motion.div
                         key={task.id}
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -55,9 +55,10 @@ export function AnimeQuestBoard({ currentSprint }) {
                                 <Trophy size={16} /> {task.points}
                             </div>
                         </div>
-                    </motion.div>
+                    </Motion.div>
                 ))}
             </div>
         </div>
     )
 }
+export default AnimeQuestBoard;

@@ -30,12 +30,16 @@ export function ArcadeCabinet() {
     const trimMat = <meshStandardMaterial color="#df00ff" emissive="#df00ff" emissiveIntensity={0.5} />;
     const screenMat = <meshStandardMaterial color="#00f0ff" emissive="#00f0ff" emissiveIntensity={0.8} />;
 
-    // Floating Pixels
+    const rand = (n) => {
+        const x = Math.sin(n) * 43758.5453;
+        return x - Math.floor(x);
+    };
     const pixels = useMemo(() => {
         return [...Array(12)].map((_, i) => {
             const angle = (i / 12) * Math.PI * 2;
-            const radius = 2 + Math.random() * 0.5;
-            const y = (Math.random() - 0.5) * 2;
+            const radius = 2 + rand(i * 3 + 1) * 0.5;
+            const y = (rand(i * 3 + 2) - 0.5) * 2;
+            const color = (rand(i * 3 + 3) > 0.5) ? "#00f0ff" : "#ff00ff";
             return (
                 <Box
                     key={i}
@@ -43,8 +47,8 @@ export function ArcadeCabinet() {
                     position={[Math.cos(angle) * radius, y, Math.sin(angle) * radius]}
                 >
                     <meshStandardMaterial
-                        color={Math.random() > 0.5 ? "#00f0ff" : "#ff00ff"}
-                        emissive={Math.random() > 0.5 ? "#00f0ff" : "#ff00ff"}
+                        color={color}
+                        emissive={color}
                         emissiveIntensity={1}
                     />
                 </Box>
@@ -102,3 +106,4 @@ export function ArcadeCabinet() {
         </group>
     )
 }
+export default ArcadeCabinet;

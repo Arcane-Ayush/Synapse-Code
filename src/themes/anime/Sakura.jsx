@@ -7,15 +7,18 @@ export function Sakura() {
     const count = 120; // Optimized count for better performance
     const mesh = useRef();
 
-    // Generate random positions (x, y, z) and speeds
+    const rand = (n) => {
+        const x = Math.sin(n) * 43758.5453;
+        return x - Math.floor(x);
+    };
     const particles = useMemo(() => {
         const temp = [];
         for (let i = 0; i < count; i++) {
-            const x = (Math.random() - 0.5) * 10;
-            const y = (Math.random() - 0.5) * 10;
-            const z = (Math.random() - 0.5) * 10;
-            const speed = 0.015 + Math.random() * 0.01; // Slower, driftier
-            const sway = Math.random() * 0.02;
+            const x = (rand(i * 5 + 1) - 0.5) * 10;
+            const y = (rand(i * 5 + 2) - 0.5) * 10;
+            const z = (rand(i * 5 + 3) - 0.5) * 10;
+            const speed = 0.015 + rand(i * 5 + 4) * 0.01;
+            const sway = rand(i * 5 + 5) * 0.02;
             temp.push({ x, y, z, speed, sway, initialX: x });
         }
         return temp;
@@ -61,3 +64,4 @@ export function Sakura() {
 export function AnimeBackground() {
     return <Sakura />
 }
+export default AnimeBackground;

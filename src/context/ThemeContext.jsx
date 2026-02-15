@@ -1,19 +1,14 @@
+/* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useEffect, useState } from "react";
 import { THEMES } from "../themes/config";
 
 const ThemeContext = createContext();
 
-export { THEMES as themes };
-
 export function ThemeProvider({ children }) {
     const [theme, setTheme] = useState(() => {
-        // Randomize theme for new users
-        // const saved = localStorage.getItem("google-club-theme");
-        // if (saved) return saved;
-
-        // Randomize theme on EVERY reload (ignoring saved preference)
-        const allThemes = Object.values(THEMES);
-        return allThemes[Math.floor(Math.random() * allThemes.length)];
+        const saved = localStorage.getItem("google-club-theme");
+        if (saved && Object.values(THEMES).includes(saved)) return saved;
+        return THEMES.BASIC;
     });
 
     useEffect(() => {

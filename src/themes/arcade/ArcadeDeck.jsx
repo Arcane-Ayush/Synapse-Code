@@ -181,3 +181,4 @@ export function ArcadeDeck({ projects }) {
         </div>
     );
 }
+export default ArcadeDeck;

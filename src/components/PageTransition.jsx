@@ -1,5 +1,7 @@
-import { motion } from "framer-motion";
-import { useTheme, themes } from "../context/ThemeContext";
+import { motion as Motion, useReducedMotion } from "framer-motion";
+import { useTheme } from "../context/ThemeContext";
+import { THEMES as themes } from "../themes/config";
+import { useEffect } from "react";
 
 const variants = {
     [themes.BASIC]: {
@@ -25,16 +27,31 @@ const variants = {
 export const PageTransition = ({ children }) => {
     const { theme } = useTheme();
     const currentVariant = variants[theme] || variants[themes.BASIC];
+    const prefersReduced = useReducedMotion();
+
+    useEffect(() => {
+        const heading = document.querySelector('#main-content h1, #main-content h2');
+        if (heading) {
+            const prevTabIndex = heading.getAttribute('tabindex');
+            heading.setAttribute('tabindex', '-1');
+            (heading instanceof HTMLElement) && heading.focus();
+            if (prevTabIndex === null) {
+                heading.removeAttribute('tabindex');
+            } else {
+                heading.setAttribute('tabindex', prevTabIndex);
+            }
+        }
+    }, []);
 
     return (
-        <motion.div
-            initial={currentVariant.initial}
-            animate={currentVariant.animate}
-            exit={currentVariant.exit}
-            transition={currentVariant.transition}
+        <Motion.div
+            initial={prefersReduced ? { opacity: 0 } : currentVariant.initial}
+            animate={prefersReduced ? { opacity: 1 } : currentVariant.animate}
+            exit={prefersReduced ? { opacity: 0 } : currentVariant.exit}
+            transition={prefersReduced ? { duration: 0.2 } : currentVariant.transition}
             className="w-full h-full"
         >
             {children}
-        </motion.div>
+        </Motion.div>
     );
 };

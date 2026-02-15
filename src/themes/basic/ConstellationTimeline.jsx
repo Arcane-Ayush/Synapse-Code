@@ -1,5 +1,5 @@
 import { useRef, useState, useMemo, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion as Motion } from 'framer-motion';
 import { ExternalLink, Github } from 'lucide-react';
 
 
@@ -96,7 +96,7 @@ export function ConstellationTimeline({ projects }) {
                             onMouseEnter={() => setActiveId(project.id)}
                         >
                             {/* The Star Node (Shiny White/Cyan) */}
-                            <motion.div
+                            <Motion.div
                                 className={`
                                     relative cursor-pointer rounded-full flex items-center justify-center
                                     transition-all duration-300
@@ -109,7 +109,7 @@ export function ConstellationTimeline({ projects }) {
                                 }}
                             >
                                 {isActive && <div className="absolute inset-0 rounded-full animate-ping bg-white opacity-50" />}
-                            </motion.div>
+                            </Motion.div>
 
                             {/* Project Information Card */}
                             <div
@@ -191,3 +191,4 @@ export function ConstellationTimeline({ projects }) {
         </div>
     );
 }
+export default ConstellationTimeline;

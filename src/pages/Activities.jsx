@@ -1,13 +1,15 @@
 // import { activities } from "../data/mockData"; // 🗑️ Deleted direct import
 import { useData } from "../hooks/useData"; // 🆕 Generated Hook
-import { useTheme, themes } from "../context/ThemeContext";
-import { SpaceActivityPass } from "../themes/basic/SpaceActivityPass";
-import { ArcadeActivityCard } from "../themes/arcade/ArcadeActivityCard";
-import { AnimeActivityCard } from "../themes/anime/AnimeActivityCard";
+import { useTheme } from "../context/ThemeContext";
+import { THEMES as themes } from "../themes/config";
+import SpaceActivityPass from "../themes/basic/SpaceActivityPass";
+import ArcadeActivityCard from "../themes/arcade/ArcadeActivityCard";
+import AnimeActivityCard from "../themes/anime/AnimeActivityCard";
+import SEO from "../components/SEO";
 
 export function Activities() {
     const { theme } = useTheme();
-    const { activities } = useData(); // 🎣 Hook usage
+    const { activities, loading } = useData(); // 🎣 Hook usage
 
     // Auto-update status based on date
     const processedActivities = activities.map(activity => {
@@ -47,6 +49,24 @@ export function Activities() {
 
     return (
         <div className="container mx-auto px-4 py-12">
+            <SEO
+                title="Upcoming Events & Workshops — Google Club CU"
+                description="Explore upcoming activities, workshops, and study jams at Google Club CU."
+                image={import.meta.env.VITE_SITE_URL ? `${import.meta.env.VITE_SITE_URL}/og-activities.png` : undefined}
+                url={import.meta.env.VITE_SITE_URL ? `${import.meta.env.VITE_SITE_URL}/activities` : undefined}
+                jsonLd={{
+                    "@context": "https://schema.org",
+                    "@type": "Event",
+                    "name": "Google Club CU Activities",
+                    "eventAttendanceMode": "https://schema.org/OnlineEventAttendanceMode",
+                    "eventStatus": "https://schema.org/EventScheduled",
+                    "organizer": {
+                        "@type": "Organization",
+                        "name": "Google Club CU"
+                    },
+                    "url": import.meta.env.VITE_SITE_URL ? `${import.meta.env.VITE_SITE_URL}/activities` : ""
+                }}
+            />
             <div className="text-center mb-16">
                 <h2 className={`text-5xl md:text-6xl font-black mb-4 ${theme === themes.ANIME ? "text-slate-800 drop-shadow-sm font-serif italic" :
                     theme === themes.ARCADE ? "text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-yellow-500 uppercase tracking-tighter" :
@@ -65,6 +85,13 @@ export function Activities() {
             </div>
 
             <div className="space-y-6">
+                {loading && (
+                    <div className="grid md:grid-cols-3 gap-6">
+                        {[...Array(6)].map((_, i) => (
+                            <div key={i} className="p-6 rounded-2xl border border-white/10 bg-white/5 animate-pulse h-40" />
+                        ))}
+                    </div>
+                )}
                 {sortedActivities.map((activity, index) => (
                     theme === themes.ANIME ? <AnimeActivityCard key={activity.id} activity={activity} index={index} /> :
                         theme === themes.ARCADE ? <ArcadeActivityCard key={activity.id} activity={activity} index={index} /> :
@@ -74,3 +101,4 @@ export function Activities() {
         </div>
     );
 }
+export default Activities;

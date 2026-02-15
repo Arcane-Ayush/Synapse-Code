@@ -1,9 +1,10 @@
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "../utils/cn";
 import { Menu, X, Rocket, Terminal, Gamepad2 } from "lucide-react";
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { useTheme, themes } from "../context/ThemeContext";
+import { useState } from "react";
+import { motion as Motion, AnimatePresence } from "framer-motion";
+import { useTheme } from "../context/ThemeContext";
+import { THEMES as themes } from "../themes/config";
 
 const navItems = [
     { name: "Home", path: "/" },
@@ -14,13 +15,11 @@ const navItems = [
 
 export function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
-    const [isVisible, setIsVisible] = useState(false);
+    const [isVisible] = useState(true);
     const location = useLocation();
     const { theme } = useTheme();
 
-    useEffect(() => {
-        setIsVisible(true);
-    }, []);
+    // visible on mount by default
 
     // Theme-based Styles Configuration
     const getStyles = () => {
@@ -99,6 +98,7 @@ export function Navbar() {
                 <nav
                     className={cn("hidden md:flex items-center transition-all duration-300", styles.dock)}
                     style={styles.dockStyle}
+                    aria-label="Main navigation"
                 >
                     {navItems.map((item) => {
                         const isActive = location.pathname === item.path;
@@ -111,9 +111,10 @@ export function Navbar() {
                                     styles.item,
                                     isActive ? styles.itemActive : styles.itemInactive
                                 )}
+                                aria-current={isActive ? "page" : undefined}
                             >
                                 {isActive && styles.pill !== "hidden" && (
-                                    <motion.div
+                                    <Motion.div
                                         layoutId="navbar-pill"
                                         className={cn("absolute inset-0 rounded-full -z-10 shadow-sm", styles.pill)}
                                         transition={{ type: "spring", stiffness: 300, damping: 30 }}
@@ -130,6 +131,8 @@ export function Navbar() {
                     <button
                         onClick={() => setIsOpen(!isOpen)}
                         className={cn("p-3 rounded-full text-white transition-colors", styles.logo)}
+                        aria-expanded={isOpen}
+                        aria-label="Toggle navigation menu"
                     >
                         {isOpen ? <X size={20} /> : <Menu size={20} />}
                     </button>
@@ -139,7 +142,7 @@ export function Navbar() {
             {/* Mobile Menu Overlay */}
             <AnimatePresence>
                 {isOpen && (
-                    <motion.div
+                    <Motion.div
                         initial={{ opacity: 0, y: -20, scale: 0.95 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: -20, scale: 0.95 }}
@@ -165,7 +168,7 @@ export function Navbar() {
                                 </Link>
                             ))}
                         </div>
-                    </motion.div>
+                    </Motion.div>
                 )}
             </AnimatePresence>
         </div>

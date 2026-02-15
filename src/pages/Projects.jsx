@@ -1,18 +1,28 @@
 // import { projects } from "../data/mockData"; // 🗑️ Deleted
 import { useData } from "../hooks/useData"; // 🆕 Hook
 import { ProjectCard } from "../components/ProjectCard";
-import { useTheme, themes } from "../context/ThemeContext";
+import { useTheme } from "../context/ThemeContext";
+import { THEMES as themes } from "../themes/config";
 import { Button } from "../components/Button";
-import { ConstellationTimeline } from "../themes/basic/ConstellationTimeline";
-import { ArcadeDeck } from "../themes/arcade/ArcadeDeck";
-import { CylinderCarousel } from "../themes/anime/CylinderCarousel";
+import ConstellationTimeline from "../themes/basic/ConstellationTimeline";
+import ArcadeDeck from "../themes/arcade/ArcadeDeck";
+import CylinderCarousel from "../themes/anime/CylinderCarousel";
 import { ArrowRight } from "lucide-react";
 import { useState } from "react";
+import SEO from "../components/SEO";
+import { useEffect } from "react";
 
 export function Projects() {
     const { theme } = useTheme();
-    const { projects } = useData(); // 🎣 Hook
+    const { projects, loading } = useData(); // 🎣 Hook
     const [showAll, setShowAll] = useState(false);
+    const isMobile = typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches;
+    useEffect(() => {
+        if (theme === themes.ANIME && isMobile && !showAll) {
+            setShowAll(true);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [theme, isMobile]);
 
 
     // Use ALL projects for carousel
@@ -21,6 +31,12 @@ export function Projects() {
 
     return (
         <div className="h-[calc(100vh-7rem)] flex flex-col">
+            <SEO
+                title="Student Projects — Google Club CU"
+                description="Explore student-built projects across web, AI, mobile, and more."
+                image={import.meta.env.VITE_SITE_URL ? `${import.meta.env.VITE_SITE_URL}/og-projects.png` : undefined}
+                url={import.meta.env.VITE_SITE_URL ? `${import.meta.env.VITE_SITE_URL}/projects` : undefined}
+            />
             <div className="text-center pt-12 pb-4">
                 <h2 className="text-4xl font-bold mb-2">Student Projects</h2>
                 <p className="text-muted-foreground max-w-2xl mx-auto text-sm">
@@ -70,6 +86,13 @@ export function Projects() {
                     )}
 
                     <div className="flex flex-col gap-2">
+                        {loading && (
+                            <div className="grid md:grid-cols-2 gap-4">
+                                {[...Array(4)].map((_, i) => (
+                                    <div key={i} className="h-40 rounded-xl border border-white/10 bg-white/5 animate-pulse" />
+                                ))}
+                            </div>
+                        )}
                         {projects.map((project, index) => (
                             <ProjectCard key={project.id} project={project} index={index} />
                         ))}
@@ -79,3 +102,4 @@ export function Projects() {
         </div>
     );
 }
+export default Projects;

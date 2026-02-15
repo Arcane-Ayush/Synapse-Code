@@ -1,15 +1,35 @@
 import { Canvas } from '@react-three/fiber'
-import { useTheme, themes } from '../context/ThemeContext';
+import { Suspense, lazy, useEffect, useRef, useState } from 'react'
+import { useTheme } from '../context/ThemeContext';
+import { THEMES as themes } from '../themes/config';
 import { cn } from '../utils/cn';
-import { SpaceBackground } from '../themes/basic/SpaceBackground';
-import { ArcadeBackground } from '../themes/arcade/RetroGrid';
-import { AnimeBackground } from '../themes/anime/Sakura';
+const SpaceBackground = lazy(() => import('../themes/basic/SpaceBackground'));
+const ArcadeBackground = lazy(() => import('../themes/arcade/RetroGrid'));
+const AnimeBackground = lazy(() => import('../themes/anime/Sakura'));
 
 export function BackgroundParticles() {
     const { theme } = useTheme();
+    const containerRef = useRef(null);
+    const [inView, setInView] = useState(false);
+
+    useEffect(() => {
+        const el = containerRef.current;
+        if (!el) return;
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries[0].isIntersecting) {
+                    setInView(true);
+                    observer.disconnect();
+                }
+            },
+            { root: null, threshold: 0 }
+        );
+        observer.observe(el);
+        return () => observer.disconnect();
+    }, []);
 
     return (
-        <div className="fixed inset-0 -z-10 h-full w-full pointer-events-none transition-colors duration-700">
+        <div ref={containerRef} className="fixed inset-0 -z-10 h-full w-full pointer-events-none transition-colors duration-700" aria-hidden="true">
 
             {/* Dynamic Background Colors/Gradients outside Canvas for performance */}
             <div className={cn(
@@ -19,19 +39,22 @@ export function BackgroundParticles() {
                 theme === themes.ANIME && "bg-sky-50"
             )} />
 
-            <Canvas camera={{ position: [0, 0, 5], fov: 60 }}>
-                {theme === themes.BASIC && (
-                    <SpaceBackground />
-                )}
-
-                {theme === themes.ARCADE && (
-                    <ArcadeBackground />
-                )}
-
-                {theme === themes.ANIME && (
-                    <AnimeBackground />
-                )}
-            </Canvas>
+            {inView && (
+                <Canvas camera={{ position: [0, 0, 5], fov: 60 }}>
+                    <Suspense
+                        fallback={
+                            <mesh>
+                                <torusGeometry args={[2, 0.1, 8, 32]} />
+                                <meshBasicMaterial color={theme === themes.ARCADE ? '#df00ff' : theme === themes.ANIME ? '#ffb7c5' : '#ffffff'} />
+                            </mesh>
+                        }
+                    >
+                        {theme === themes.BASIC && <SpaceBackground />}
+                        {theme === themes.ARCADE && <ArcadeBackground />}
+                        {theme === themes.ANIME && <AnimeBackground />}
+                    </Suspense>
+                </Canvas>
+            )}
         </div>
     )
 }

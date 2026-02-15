@@ -5,21 +5,21 @@ import * as THREE from 'three';
 
 function BlackHoleRing({ count, radius, color, speed, size, opacity, spread }) {
     const ref = useRef();
-    // Create a flat ring distribution
-    const particles = useMemo(() => {
-        const positions = new Float32Array(count * 3);
-        const radiusSpread = spread || radius * 0.3; // Use custom spread or default to 30%
-
+    const rand = (n) => {
+        const x = Math.sin(n) * 43758.5453;
+        return x - Math.floor(x);
+    };
+    const positions = useMemo(() => {
+        const arr = new Float32Array(count * 3);
+        const radiusSpread = spread || radius * 0.3;
         for (let i = 0; i < count; i++) {
-            const angle = Math.random() * Math.PI * 2;
-            // Distribute primarily on ring edge with some spread
-            const r = radius + (Math.random() - 0.5) * radiusSpread;
-
-            positions[i * 3] = Math.cos(angle) * r;     // x
-            positions[i * 3 + 1] = (Math.random() - 0.5) * 0.2; // y (flat)
-            positions[i * 3 + 2] = Math.sin(angle) * r;     // z
+            const angle = i * 0.61803398875 * Math.PI * 2;
+            const r = radius + (rand(i * 2 + 1) - 0.5) * radiusSpread;
+            arr[i * 3] = Math.cos(angle) * r;
+            arr[i * 3 + 1] = (rand(i * 2 + 2) - 0.5) * 0.2;
+            arr[i * 3 + 2] = Math.sin(angle) * r;
         }
-        return positions;
+        return arr;
     }, [count, radius, spread]);
 
     useFrame((state, delta) => {
@@ -29,7 +29,7 @@ function BlackHoleRing({ count, radius, color, speed, size, opacity, spread }) {
     });
 
     return (
-        <Points ref={ref} positions={particles} stride={3} frustumCulled={false}>
+        <Points ref={ref} positions={positions} stride={3} frustumCulled={false}>
             <PointMaterial
                 transparent
                 color={color}
@@ -107,3 +107,4 @@ export function BlackHole(props) {
         </group>
     );
 }
+export default BlackHole;

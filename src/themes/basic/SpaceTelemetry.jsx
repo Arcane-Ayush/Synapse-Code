@@ -1,5 +1,5 @@
 import { Radar, Target, Activity, Cpu, Signal } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion as Motion } from "framer-motion";
 
 export function SpaceTelemetry({ leaderboard, currentSprint }) {
     const sortedLeaderboard = [...leaderboard].sort((a, b) => b.points - a.points);
@@ -16,7 +16,7 @@ export function SpaceTelemetry({ leaderboard, currentSprint }) {
 
                 <div className="space-y-4">
                     {sortedLeaderboard.map((team, index) => (
-                        <motion.div
+                        <Motion.div
                             key={team.name}
                             initial={{ width: 0, opacity: 0 }}
                             animate={{ width: "100%", opacity: 1 }}
@@ -32,14 +32,14 @@ export function SpaceTelemetry({ leaderboard, currentSprint }) {
                             </div>
                             {/* Signal Bar Visual */}
                             <div className="h-1 bg-cyan-950 w-full mt-1 relative overflow-hidden">
-                                <motion.div
+                                <Motion.div
                                     className="h-full bg-cyan-500/50 shadow-[0_0_10px_rgba(6,182,212,0.5)]"
                                     initial={{ width: 0 }}
                                     animate={{ width: `${(team.points / maxPoints) * 100}%` }}
                                     transition={{ duration: 1, ease: "circOut" }}
                                 />
                             </div>
-                        </motion.div>
+                        </Motion.div>
                     ))}
                 </div>
             </div>
@@ -60,7 +60,7 @@ export function SpaceTelemetry({ leaderboard, currentSprint }) {
                 </div>
 
                 <div className="space-y-4">
-                    {currentSprint.tasks.map((task, i) => (
+                    {currentSprint.tasks.map((task) => (
                         <div key={task.id} className="bg-cyan-950/10 border border-cyan-900/30 p-3 flex items-center justify-between group hover:border-cyan-500/50 transition-colors">
                             <div className="flex items-center gap-4">
                                 <div className="p-2 bg-black border border-cyan-900/50 text-cyan-400">
@@ -103,3 +103,4 @@ export function SpaceTelemetry({ leaderboard, currentSprint }) {
         </div>
     );
 }
+export default SpaceTelemetry;

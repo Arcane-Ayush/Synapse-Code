@@ -1,14 +1,15 @@
 import { Hero3D } from "../components/Hero3D";
 import { Button } from "../components/Button";
 import { Link } from "react-router-dom";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion as Motion } from "framer-motion";
 import { ArrowRight, Code, Users, Rocket } from "lucide-react";
-import { useTheme, themes } from "../context/ThemeContext";
+import { useTheme } from "../context/ThemeContext";
+import { THEMES as themes } from "../themes/config";
+import SEO from "../components/SEO";
 
 export function Home() {
     const { theme } = useTheme();
-    const { scrollYProgress } = useScroll();
-    const y = useTransform(scrollYProgress, [0, 1], [0, -50]);
+    // scroll-based transforms removed
 
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -31,6 +32,22 @@ export function Home() {
 
     return (
         <div className="relative overflow-hidden w-full">
+            <SEO
+                title="Google Club CU — Build the Future Together"
+                description="Peer-to-peer student community building projects, learning tech, and collaborating."
+                image={import.meta.env.VITE_SITE_URL ? `${import.meta.env.VITE_SITE_URL}/og-home.png` : undefined}
+                url={import.meta.env.VITE_SITE_URL ? `${import.meta.env.VITE_SITE_URL}/` : undefined}
+                jsonLd={{
+                    "@context": "https://schema.org",
+                    "@type": "Organization",
+                    "name": "Google Club CU",
+                    "url": import.meta.env.VITE_SITE_URL || "",
+                    "logo": import.meta.env.VITE_SITE_URL ? `${import.meta.env.VITE_SITE_URL}/logo.png` : "",
+                    "sameAs": [
+                        "https://github.com/Arcane-Ayush"
+                    ]
+                }}
+            />
             {/* Added pt-24 for mobile to clear navbar, removed min-h calc for mobile to avoid scroll issues if content is tall */}
             <section className="relative min-h-screen md:min-h-[calc(100vh-4rem)] pt-28 md:pt-0 flex flex-col items-center justify-center px-4 overflow-hidden">
 
@@ -41,34 +58,34 @@ export function Home() {
                 <div className="container max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center relative z-10">
 
                     {/* Text Content */}
-                    <motion.div
+                    <Motion.div
                         variants={containerVariants}
                         initial="hidden"
                         animate="visible"
                         className="text-center md:text-left space-y-8"
                     >
-                        <motion.div variants={itemVariants} className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm">
+                        <Motion.div variants={itemVariants} className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm">
                             <span className="relative flex h-3 w-3">
                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
                                 <span className="relative inline-flex rounded-full h-3 w-3 bg-orange-500"></span>
                             </span>
                             <span className="text-sm font-medium text-muted-foreground">Ignite the Flare: Peer-to-Peer Learning</span>
-                        </motion.div>
+                        </Motion.div>
 
-                        <motion.h1 variants={itemVariants} className="text-6xl md:text-8xl font-black tracking-tighter leading-tight">
+                        <Motion.h1 variants={itemVariants} className="text-6xl md:text-8xl font-black tracking-tighter leading-tight">
                             Build the <br />
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-red-500 to-yellow-500 animate-gradient-x">
                                 Future
                             </span>
                             <br />
                             Together.
-                        </motion.h1>
+                        </Motion.h1>
 
-                        <motion.p variants={itemVariants} className="text-xl md:text-2xl text-muted-foreground max-w-xl mx-auto md:mx-0 font-light leading-relaxed">
+                        <Motion.p variants={itemVariants} className="text-xl md:text-2xl text-muted-foreground max-w-xl mx-auto md:mx-0 font-light leading-relaxed">
                             Google Club CU is a peer to peer student community for aspiring developers, designers, and innovators.
-                        </motion.p>
+                        </Motion.p>
 
-                        <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start pt-4">
+                        <Motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start pt-4">
                             <Link to="/projects">
                                 <Button size="lg" className="h-14 px-8 text-lg rounded-full bg-white text-black hover:bg-gray-200 transition-all font-bold">
                                     View Projects <ArrowRight className="ml-2 w-5 h-5" />
@@ -86,11 +103,11 @@ export function Home() {
                                     Join Activities
                                 </Button>
                             </Link>
-                        </motion.div>
-                    </motion.div>
+                        </Motion.div>
+                    </Motion.div>
 
                     {/* 3D Hero Element */}
-                    <motion.div
+                    <Motion.div
                         initial={{ opacity: 0, y: 50 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 1, delay: 0.2 }}
@@ -98,12 +115,12 @@ export function Home() {
                     >
                         <div className="absolute inset-0 bg-gradient-to-tr from-transparent to-blue-500/5 rounded-full blur-3xl -z-10" />
                         <Hero3D />
-                    </motion.div>
+                    </Motion.div>
 
                 </div>
 
                 {/* Scroll Indicator */}
-                <motion.div
+                <Motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 1.5, duration: 1 }}
@@ -111,7 +128,7 @@ export function Home() {
                 >
                     <span className="text-xs uppercase tracking-widest">Scroll to Explore</span>
                     <div className="w-[1px] h-8 bg-gradient-to-b from-transparent via-white/50 to-transparent" />
-                </motion.div>
+                </Motion.div>
             </section>
 
             {/* Stats / Features Section using Glassmorphism */}
@@ -142,12 +159,13 @@ export function Home() {
         </div>
     );
 }
+export default Home;
 
 function FeatureCard({ icon, title, desc, theme }) {
     const isAnime = theme === themes.ANIME;
 
     return (
-        <motion.div
+        <Motion.div
             whileHover={{ y: -5 }}
             className={`p-8 rounded-2xl backdrop-blur-lg transition-colors border ${isAnime
                 ? "bg-white/80 shadow-lg border-white/50 hover:bg-white/90 hover:shadow-xl"
@@ -164,6 +182,6 @@ function FeatureCard({ icon, title, desc, theme }) {
             <p className={`leading-relaxed ${isAnime ? "text-slate-600 font-medium" : "text-muted-foreground"}`}>
                 {desc}
             </p>
-        </motion.div>
+        </Motion.div>
     )
 }

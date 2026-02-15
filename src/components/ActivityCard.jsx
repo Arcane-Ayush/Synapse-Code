@@ -1,11 +1,11 @@
-import { motion } from "framer-motion";
+import { motion as Motion } from "framer-motion";
 import { Calendar, Tag } from "lucide-react";
 
 export function ActivityCard({ activity, index }) {
     const isUpcoming = activity.status === "Upcoming";
 
     return (
-        <motion.div
+        <Motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: index * 0.1, duration: 0.4 }}
@@ -33,6 +33,6 @@ export function ActivityCard({ activity, index }) {
                     {activity.description}
                 </p>
             </div>
-        </motion.div>
+        </Motion.div>
     );
 }

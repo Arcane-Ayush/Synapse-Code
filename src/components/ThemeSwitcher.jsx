@@ -20,6 +20,8 @@ export function ThemeSwitcher() {
                             isActive ? "text-white bg-white/20" : "text-gray-400 hover:text-white hover:bg-white/10"
                         )}
                         title={option.label}
+                        aria-label={`Switch to ${option.label} theme`}
+                        aria-pressed={isActive}
                     >
                         <Icon size={20} className="relative z-10" />
                         {isActive && (

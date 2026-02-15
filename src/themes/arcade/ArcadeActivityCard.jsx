@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion as Motion } from "framer-motion";
 import { Gamepad2 } from "lucide-react";
 import { formatDate } from "../../utils/dateUtils";
 
@@ -7,7 +7,7 @@ export function ArcadeActivityCard({ activity, index }) {
     const isCompleted = activity.status === "Completed";
 
     return (
-        <motion.div
+        <Motion.div
             initial={{ opacity: 0, x: -50, rotate: isCompleted ? 0 : -1 }}
             animate={{ opacity: 1, x: 0, rotate: isCompleted ? 0 : 0 }}
             transition={{ delay: index * 0.15 }}
@@ -84,6 +84,7 @@ export function ArcadeActivityCard({ activity, index }) {
                     </a>
                 )}
             </div>
-        </motion.div>
+        </Motion.div>
     );
 }
+export default ArcadeActivityCard;

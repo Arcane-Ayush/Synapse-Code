@@ -1,13 +1,25 @@
 import { useRef, useMemo } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { Points, PointMaterial } from '@react-three/drei'
-import * as random from "maath/random";
 import * as THREE from 'three';
 
 // --- BASIC: Interactive Milky Way ---
 export function Stars(props) {
     const ref = useRef()      // For Auto-Rotation
-    const sphere = random.inSphere(new Float32Array(5000), { radius: 20 })
+    const sphere = useMemo(() => {
+        const N = 5000;
+        const arr = new Float32Array(N * 3);
+        const ga = Math.PI * (3 - Math.sqrt(5));
+        for (let i = 0; i < N; i++) {
+            const z = 1 - (i / (N - 1)) * 2;
+            const r = Math.sqrt(1 - z * z);
+            const theta = i * ga;
+            arr[i * 3] = Math.cos(theta) * r * 20;
+            arr[i * 3 + 1] = z * 20;
+            arr[i * 3 + 2] = Math.sin(theta) * r * 20;
+        }
+        return arr;
+    }, [])
 
     useFrame((state, delta) => {
         if (ref.current) {
@@ -35,23 +47,26 @@ export function Stars(props) {
 export function SpaceDust() {
     const count = 300;
     const mesh = useRef();
-
+    const rand = (n) => {
+        const x = Math.sin(n) * 43758.5453;
+        return x - Math.floor(x);
+    };
     const particles = useMemo(() => {
         const temp = [];
         for (let i = 0; i < count; i++) {
-            const x = (Math.random() - 0.5) * 15;
-            const y = (Math.random() - 0.5) * 15;
-            const z = (Math.random() - 0.5) * 10; // Depth
-            const speed = 0.005 + Math.random() * 0.01; // Very slow drift
-            const factor = 0.2 + Math.random() * 0.8; // Random scale
+            const x = (rand(i * 3 + 1) - 0.5) * 15;
+            const y = (rand(i * 3 + 2) - 0.5) * 15;
+            const z = (rand(i * 3 + 3) - 0.5) * 10;
+            const speed = 0.005 + rand(i * 3 + 4) * 0.01;
+            const factor = 0.2 + rand(i * 3 + 5) * 0.8;
             temp.push({ x, y, z, speed, factor, initialY: y });
         }
         return temp;
-    }, []);
+    }, [])
 
-    const dummy = useMemo(() => new THREE.Object3D(), []);
+    const dummyRef = useRef(new THREE.Object3D());
 
-    useFrame((state) => {
+    useFrame(() => {
         if (!mesh.current) return;
         particles.forEach((p, i) => {
             // Gentle float upwards (heat/gravity)
@@ -60,8 +75,9 @@ export function SpaceDust() {
             // Loop back to bottom
             if (p.y > 10) p.y = -10;
 
+            const dummy = dummyRef.current;
             dummy.position.set(p.x, p.y, p.z);
-            dummy.scale.setScalar(p.factor * 0.08); // Tiny specs
+            dummy.scale.setScalar(p.factor * 0.08);
             dummy.rotation.x += p.speed;
             dummy.updateMatrix();
             mesh.current.setMatrixAt(i, dummy.matrix);
@@ -85,3 +101,4 @@ export function SpaceBackground() {
         </>
     )
 }
+export default SpaceBackground;

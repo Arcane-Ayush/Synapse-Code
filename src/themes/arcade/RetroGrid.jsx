@@ -33,3 +33,4 @@ export function ArcadeBackground() {
         </>
     )
 }
+export default ArcadeBackground;

@@ -5,7 +5,7 @@ export const formatDate = (isoDate) => {
             day: 'numeric',
             year: 'numeric'
         });
-    } catch (e) {
+    } catch {
         return isoDate;
     }
 };

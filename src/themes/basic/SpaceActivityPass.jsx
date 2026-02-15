@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion as Motion } from "framer-motion";
 import { Calendar, Clock, MapPin, QrCode, ScanLine, Ticket } from "lucide-react";
 import { formatDate } from "../../utils/dateUtils";
 
@@ -7,7 +7,7 @@ export function SpaceActivityPass({ activity, index }) {
     const isCompleted = activity.status === "Completed";
 
     return (
-        <motion.div
+        <Motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: index * 0.15 }}
@@ -103,6 +103,7 @@ export function SpaceActivityPass({ activity, index }) {
                     )}
                 </div>
             </div>
-        </motion.div>
+        </Motion.div>
     );
 }
+export default SpaceActivityPass;

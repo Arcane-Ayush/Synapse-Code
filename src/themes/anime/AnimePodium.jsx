@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion as Motion } from "framer-motion";
 
 export function AnimePodium({ leaderboard }) {
     const sorted = [...leaderboard].sort((a, b) => b.points - a.points);
@@ -11,7 +11,6 @@ export function AnimePodium({ leaderboard }) {
                 {top3.map((team, index) => {
                     const isFirst = index === 1;
                     const isSecond = index === 0;
-                    const isThird = index === 2;
                     let height = isFirst ? "h-72 md:h-96" : isSecond ? "h-56 md:h-72" : "h-40 md:h-56";
                     let color = isFirst ? "bg-gradient-to-b from-yellow-300 via-yellow-400 to-orange-400 border-yellow-200"
                         : isSecond ? "bg-gradient-to-b from-slate-200 via-slate-300 to-slate-400 border-slate-200"
@@ -21,14 +20,14 @@ export function AnimePodium({ leaderboard }) {
                     let rankColor = isFirst ? "text-yellow-600" : isSecond ? "text-slate-600" : "text-orange-700";
 
                     return (
-                        <motion.div
+                        <Motion.div
                             key={team.name}
                             initial={{ y: 200, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
                             transition={{ delay, type: "spring", stiffness: 80, damping: 15 }}
                             className={`relative flex flex-col items-center justify-end w-1/3 max-w-[200px] rounded-t-3xl border-t-4 border-x border-white/40 ${height} ${color} ${glow} group`}
                         >
-                            <motion.div
+                            <Motion.div
                                 initial={{ y: 20 }}
                                 animate={{ y: [0, -15, 0] }}
                                 transition={{ repeat: Infinity, duration: 4, ease: "easeInOut", delay: delay }}
@@ -44,12 +43,12 @@ export function AnimePodium({ leaderboard }) {
                                 <h3 className="mt-3 text-sm md:text-lg font-bold text-slate-800 bg-white/90 px-4 py-1.5 rounded-full shadow-md whitespace-nowrap">
                                     {team.name}
                                 </h3>
-                            </motion.div>
+                            </Motion.div>
                             <div className="mb-8 text-center bg-white/20 backdrop-blur-sm rounded-xl px-4 py-2 mx-4 w-3/4">
                                 <span className="block text-2xl md:text-4xl font-black text-white drop-shadow-md">{team.points}</span>
                                 <span className="text-xs uppercase tracking-widest text-white/90 font-bold">Points</span>
                             </div>
-                        </motion.div>
+                        </Motion.div>
                     );
                 })}
             </div>
@@ -60,7 +59,7 @@ export function AnimePodium({ leaderboard }) {
                 </h4>
                 <div className="flex gap-6 overflow-x-auto pb-4 px-2 no-scrollbar">
                     {others.map((team, i) => (
-                        <motion.div
+                        <Motion.div
                             key={team.name}
                             initial={{ opacity: 0, x: 20 }}
                             animate={{ opacity: 1, x: 0 }}
@@ -73,10 +72,11 @@ export function AnimePodium({ leaderboard }) {
                                 <p className="font-bold text-slate-700 text-lg">{team.name}</p>
                                 <p className="text-sm text-slate-500 font-medium">{team.points} pts</p>
                             </div>
-                        </motion.div>
+                        </Motion.div>
                     ))}
                 </div>
             </div>
         </div>
     );
 }
+export default AnimePodium;

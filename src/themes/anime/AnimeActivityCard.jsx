@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion as Motion } from "framer-motion";
 import { Calendar, Sparkles } from "lucide-react";
 import { formatDate } from "../../utils/dateUtils";
 
@@ -11,7 +11,7 @@ export function AnimeActivityCard({ activity, index }) {
     const borderColor = isCompleted ? "border-slate-300" : colors[activity.id % colors.length];
 
     return (
-        <motion.div
+        <Motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}
@@ -72,6 +72,7 @@ export function AnimeActivityCard({ activity, index }) {
                     </a>
                 )}
             </div>
-        </motion.div>
+        </Motion.div>
     );
 }
+export default AnimeActivityCard;

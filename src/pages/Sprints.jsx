@@ -1,14 +1,16 @@
 // import { leaderboard, currentSprint } from "../data/mockData"; // 🗑️ Deleted
 import { useData } from "../hooks/useData"; // 🆕 Hook
-import { useTheme, themes } from "../context/ThemeContext";
-import { SpaceTelemetry } from "../themes/basic/SpaceTelemetry";
-import { ArcadeKanban } from "../themes/arcade/ArcadeKanban";
-import { AnimePodium } from "../themes/anime/AnimePodium";
-import { AnimeQuestBoard } from "../themes/anime/AnimeQuestBoard";
+import { useTheme } from "../context/ThemeContext";
+import { THEMES as themes } from "../themes/config";
+import SpaceTelemetry from "../themes/basic/SpaceTelemetry";
+import ArcadeKanban from "../themes/arcade/ArcadeKanban";
+import AnimePodium from "../themes/anime/AnimePodium";
+import AnimeQuestBoard from "../themes/anime/AnimeQuestBoard";
+import SEO from "../components/SEO";
 
 export function Sprints() {
     const { theme } = useTheme();
-    const { leaderboard, currentSprint } = useData(); // 🎣 Hook
+    const { leaderboard, currentSprint, loading } = useData(); // 🎣 Hook
 
     // specific sorting and ranking logic
     const sortedLeaderboard = [...leaderboard]
@@ -17,6 +19,19 @@ export function Sprints() {
 
     return (
         <div className="container mx-auto px-4 py-12">
+            <SEO
+                title="Sprint Tracker & Leaderboard — Google Club CU"
+                description="Track sprint objectives, tasks, and leaderboard standings."
+                image={import.meta.env.VITE_SITE_URL ? `${import.meta.env.VITE_SITE_URL}/og-sprints.png` : undefined}
+                url={import.meta.env.VITE_SITE_URL ? `${import.meta.env.VITE_SITE_URL}/sprints` : undefined}
+            />
+            {loading && (
+                <div className="grid md:grid-cols-2 gap-4 mb-8">
+                    {[...Array(4)].map((_, i) => (
+                        <div key={i} className="h-32 rounded-xl border border-white/10 bg-white/5 animate-pulse" />
+                    ))}
+                </div>
+            )}
 
             {/* Conditional Rendering */}
             {theme === themes.ARCADE ? (
@@ -79,3 +94,4 @@ export function Sprints() {
         </div>
     );
 }
+export default Sprints;

@@ -40,6 +40,7 @@ export function CylinderCarousel({ projects }) {
 
     // Drag/Swipe Refs
     const isDraggingRef = useRef(false);
+    const [isDragging, setIsDragging] = useState(false);
     const lastXRef = useRef(0);
     const lastTimeRef = useRef(0);
 
@@ -87,6 +88,7 @@ export function CylinderCarousel({ projects }) {
     // --- Pointer Events (Mouse + Touch) ---
     const handlePointerDown = (e) => {
         isDraggingRef.current = true;
+        setIsDragging(true);
         isSnappingRef.current = false;
         // Unite Mouse/Touch X
         const x = e.clientX || (e.touches && e.touches[0].clientX);
@@ -114,6 +116,7 @@ export function CylinderCarousel({ projects }) {
 
     const handlePointerUp = () => {
         isDraggingRef.current = false;
+        setIsDragging(false);
         // speedRef.current tracks the last delta, so momentum initiates automatically in animate()
     };
 
@@ -158,7 +161,7 @@ export function CylinderCarousel({ projects }) {
 
     return (
         <div
-            className="relative w-full h-full flex items-center justify-center touch-pan-y"
+            className="relative w-full h-full flex items-center justify-center"
             style={{ perspective: "1500px" }}
             onMouseDown={handlePointerDown}
             onMouseMove={handlePointerMove}
@@ -168,6 +171,9 @@ export function CylinderCarousel({ projects }) {
             onTouchMove={handlePointerMove}
             onTouchEnd={handlePointerUp}
             onWheel={handleWheel}
+            // Prevent horizontal scroll hijack; allow vertical panning
+            // CSS inline for portability; can be moved to a class
+            {...(isMobile ? { style: { perspective: "1500px", touchAction: "pan-y" } } : {})}
         >
             {/* Left Button (Hidden on Mobile) */}
             <button
@@ -194,7 +200,7 @@ export function CylinderCarousel({ projects }) {
                     className="relative w-[300px] h-full preserve-3d flex items-center justify-center transition-transform duration-300 pointer-events-auto"
                     style={{
                         transformStyle: "preserve-3d",
-                        cursor: isDraggingRef.current ? 'grabbing' : 'grab'
+                        cursor: isDragging ? 'grabbing' : 'grab'
                     }}
                     onMouseEnter={() => setIsHovered(true)}
                     onMouseLeave={() => setIsHovered(false)}
@@ -287,3 +293,4 @@ export function CylinderCarousel({ projects }) {
         </div>
     )
 }
+export default CylinderCarousel;

@@ -9,7 +9,7 @@ export function Layout({ children }) {
             <ThemeEffects />
             <BackgroundParticles />
             <Navbar />
-            <main className="flex-grow pt-16 relative z-10">
+            <main id="main-content" className="flex-grow pt-16 relative z-10">
                 {children}
             </main>
             <ThemeSwitcher />
@@ -19,3 +19,4 @@ export function Layout({ children }) {
         </div>
     );
 }
+export default Layout;
