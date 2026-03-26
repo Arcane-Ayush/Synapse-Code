@@ -3,11 +3,10 @@
 @tailwind utilities;
 
 @layer base {
-
   /* Default (Deep Clean Dark) */
   /* Default (Deep Clean Dark) */
   :root,
-  :root[data-theme='basic'] {
+  :root[data-theme="basic"] {
     --background: 0 0% 0%;
     /* Pure Black for Space */
     --foreground: 0 0% 98%;
@@ -30,15 +29,18 @@
     --input: 240 3.7% 15.9%;
     --ring: 240 4.9% 83.9%;
     --radius: 0.75rem;
-    --font-heading: 'Inter', sans-serif;
+    --font-heading: "Inter", sans-serif;
 
     /* Four-Point Star with Halo (Space Sparkle) */
     /* Flare is created by the outer faint cyan path */
-    cursor: url("data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M16 0L19 13L32 16L19 19L16 32L13 19L0 16L13 13L16 0Z' fill='%2300ffff' fill-opacity='0.2'/%3E%3Cpath d='M16 4L18 14L28 16L18 18L16 28L14 18L4 16L14 14L16 4Z' fill='white'/%3E%3C/svg%3E") 16 16, auto;
+    cursor:
+      url("data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M16 0L19 13L32 16L19 19L16 32L13 19L0 16L13 13L16 0Z' fill='%2300ffff' fill-opacity='0.2'/%3E%3Cpath d='M16 4L18 14L28 16L18 18L16 28L14 18L4 16L14 14L16 4Z' fill='white'/%3E%3C/svg%3E")
+        16 16,
+      auto;
   }
 
   /* ARCADE Theme (Retro, Neon, Pixelated) */
-  :root[data-theme='arcade'] {
+  :root[data-theme="arcade"] {
     /* ... color vars ... */
     --background: 260 50% 10%;
     --foreground: 300 100% 90%;
@@ -57,15 +59,18 @@
     --input: 260 40% 20%;
     --ring: 130 100% 50%;
     --radius: 2px;
-    --font-heading: 'Courier New', monospace;
+    --font-heading: "Courier New", monospace;
 
     /* Neon Retro Arrow with Flare (Smaller: 24px) */
     /* Flare is created by the thick transparent stroke layer. */
-    cursor: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2 2L8 18L12 11L18 8L2 2Z' stroke='%23ff00ff' stroke-width='4' stroke-opacity='0.4' fill='none'/%3E%3Cpath d='M2 2L8 18L12 11L18 8L2 2Z' fill='%2300ffff' stroke='white' stroke-width='1'/%3E%3C/svg%3E") 2 2, auto;
+    cursor:
+      url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2 2L8 18L12 11L18 8L2 2Z' stroke='%23ff00ff' stroke-width='4' stroke-opacity='0.4' fill='none'/%3E%3Cpath d='M2 2L8 18L12 11L18 8L2 2Z' fill='%2300ffff' stroke='white' stroke-width='1'/%3E%3C/svg%3E")
+        2 2,
+      auto;
   }
 
   /* ANIME Theme (Vibrant, Energetic, Modern) */
-  :root[data-theme='anime'] {
+  :root[data-theme="anime"] {
     /* ... color vars ... */
     --background: 0 0% 98%;
     /* Clean White */
@@ -87,11 +92,38 @@
     --input: 230 20% 90%;
     --ring: 340 90% 60%;
     --radius: 1rem;
-    --font-heading: 'Verdana', sans-serif;
+    --font-heading: "Verdana", sans-serif;
     /* Clean, bold */
 
     /* Leaf Cursor - Tilted Top-Left */
-    cursor: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0C0 0 12 2 16 8C20 14 18 20 18 20C18 20 12 18 6 14C2 10 0 0 0 0Z' fill='%23ffb7c5' stroke='%23ff1493' stroke-width='1'/%3E%3C/svg%3E") 0 0, auto;
+    cursor:
+      url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0C0 0 12 2 16 8C20 14 18 20 18 20C18 20 12 18 6 14C2 10 0 0 0 0Z' fill='%23ffb7c5' stroke='%23ff1493' stroke-width='1'/%3E%3C/svg%3E")
+        0 0,
+      auto;
+  }
+
+  :root[data-theme="cyberpunk"] {
+    --background: 220 70% 8%;
+    --foreground: 180 100% 50%;
+    --card: 220 60% 12%;
+    --card-foreground: 180 100% 50%;
+    --popover: 220 60% 12%;
+    --popover-foreground: 180 100% 50%;
+    --primary: 60 100% 50%;
+    --primary-foreground: 220 70% 10%;
+    --secondary: 320 100% 50%;
+    --secondary-foreground: 220 70% 10%;
+    --muted: 220 50% 15%;
+    --muted-foreground: 200 40% 60%;
+    --accent: 190 100% 50%;
+    --accent-foreground: 220 70% 10%;
+    --destructive: 0 100% 50%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 220 60% 25%;
+    --input: 220 60% 25%;
+    --ring: 60 100% 50%;
+    --radius: 0.2rem;
+    --font-heading: "Orbitron", sans-serif;
   }
 }
 
@@ -105,29 +137,48 @@
   }
 
   /* Anime Theme Specifics - Selective Borders only */
-  [data-theme='anime'] .glass-card,
-  [data-theme='anime'] .navbar-pill {
+  [data-theme="anime"] .glass-card,
+  [data-theme="anime"] .navbar-pill {
     border-width: 2px;
     border-color: #000;
     box-shadow: 4px 4px 0px #000;
     /* Pop Art Shadow */
   }
 
-  [data-theme='anime'] button {
+  [data-theme="anime"] button {
     border-width: 2px;
     border-color: #000;
   }
 
-  [data-theme='anime'] .glass {
+  [data-theme="anime"] .glass {
     @apply bg-white/90 border-b-2 border-black;
   }
 
   /* Arcade Theme Specifics */
-  [data-theme='arcade'] {
-    font-family: 'Courier New', monospace;
+  [data-theme="arcade"] {
+    font-family: "Courier New", monospace;
     background-image: radial-gradient(#20ff4d 1px, transparent 1px);
     background-size: 40px 40px;
     /* Cursor already defined in :root variable block above, but ensuring consistency here if needed, though Root is better */
+  }
+
+  /* Cyberpunk Theme Specifics */
+  [data-theme="cyberpunk"] {
+    --neon-blue: #0ea5e9;
+    --neon-pink: #f43f5e;
+    --neon-yellow: #ffff00;
+
+    background-image:
+      linear-gradient(rgba(11, 26, 63, 0.9), rgba(11, 26, 63, 0.9)),
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(14, 165, 233, 0.05) 2px,
+        rgba(14, 165, 233, 0.05) 4px
+      );
+    background-size: 100% 4px;
+    animation: scanlines 10s linear infinite;
   }
 }
 
@@ -138,5 +189,95 @@
 
   .glass-card {
     @apply bg-card/20 backdrop-blur-sm border border-white/10 hover:bg-card/30 transition-all duration-300;
+  }
+
+  .cyber-glass {
+    @apply bg-black/40 backdrop-blur-xl border border-white/10 shadow-[0_0_15px_rgba(0,0,0,0.5)];
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cyber-glass::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      125deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.03) 100%
+    );
+    pointer-events: none;
+  }
+
+  .cyber-border {
+    position: relative;
+  }
+
+  .cyber-border::after {
+    content: "";
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--neon-blue),
+      transparent
+    );
+    opacity: 0.5;
+  }
+}
+
+@keyframes scanlines {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 0 100%;
+  }
+}
+
+@keyframes glitch-skew {
+  0% {
+    transform: skew(0deg);
+  }
+  20% {
+    transform: skew(-2deg);
+  }
+  40% {
+    transform: skew(2deg);
+  }
+  60% {
+    transform: skew(-1deg);
+  }
+  80% {
+    transform: skew(1deg);
+  }
+  100% {
+    transform: skew(0deg);
+  }
+}
+
+@keyframes cyber-pulse {
+  0%,
+  100% {
+    box-shadow:
+      0 0 5px var(--neon-blue),
+      0 0 10px var(--neon-blue);
+  }
+  50% {
+    box-shadow:
+      0 0 10px var(--neon-pink),
+      0 0 20px var(--neon-pink);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
   }
 }

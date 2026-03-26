@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+    <channel>
+        <title>Google Club CU Blog</title>
+        <link>https://googleclub.cu.edu</link>
+        <description>Updates, tutorials, and announcements from Google Club CU.</description>
+        <language>en-us</language>
+        <lastBuildDate>Mon, 16 Feb 2026 09:12:30 GMT</lastBuildDate>
+        
+        <item>
+            <title><![CDATA[Welcome to the New Google Club Website!]]></title>
+            <link>https://googleclub.cu.edu/blog/welcome-launch</link>
+            <guid>https://googleclub.cu.edu/blog/welcome-launch</guid>
+            <pubDate>Sun, 15 Feb 2026 00:00:00 GMT</pubDate>
+            <description><![CDATA[We're excited to launch our new website, featuring a dynamic activity calendar, project showcase, and this very blog!]]></description>
+            <author>Ayush</author>
+        </item>
+    
+        <item>
+            <title><![CDATA[Recap: Intro to AI Workshop]]></title>
+            <link>https://googleclub.cu.edu/blog/ai-workshop-recap</link>
+            <guid>https://googleclub.cu.edu/blog/ai-workshop-recap</guid>
+            <pubDate>Tue, 10 Feb 2026 00:00:00 GMT</pubDate>
+            <description><![CDATA[A look back at our successful Intro to AI workshop where we built a simple neural network from scratch.]]></description>
+            <author>Eve</author>
+        </item>
+    
+    </channel>
+</rss>
